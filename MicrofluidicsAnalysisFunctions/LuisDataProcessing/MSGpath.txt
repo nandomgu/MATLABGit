@@ -1,0 +1,40 @@
+/Users/s1259407/Documents/MATLAB/MattSegCode/
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/InfoTheory
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/Subpixel Matlab
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/Subpixel Matlab/EdgeDetector
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/Subpixel Matlab/GUI
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/Subpixel Matlab/Statistics
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/Subpixel Matlab/Synthetic
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/errorbar_groups
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/gridfitdir
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/gridfitdir/demo
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/gridfitdir/demo/html
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/gridfitdir/doc
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/gridfitdir/test
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/particle_swarm_optimisation_toolbox
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/particle_swarm_optimisation_toolbox/hiddenutils
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/particle_swarm_optimisation_toolbox/nnet
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/particle_swarm_optimisation_toolbox/testfunctions
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/rodyo-FEX-settingsdlg-1d0f847
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/FileExchangeFucntions/splinefit
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/Kraskov_mac
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/MIToolbox
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/MIToolbox/demonstration_algorithms
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/Omero dowload GUI
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/Shampoo extract
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/TestFunctionsForGeneralFunctions
+/Users/s1259407/Documents/MATLAB/MattSegCode/GeneralFunctions/mattDataProcessing
+/Users/s1259407/Documents/MATLAB/MattSegCode/Matt Seg GUI
+/Users/s1259407/Documents/MATLAB/MattSegCode/Matt Seg GUI/ActiveContourFunctions
+/Users/s1259407/Documents/MATLAB/MattSegCode/Matt Seg GUI/ElcoCellIdentificationFilterSets
+/Users/s1259407/Documents/MATLAB/MattSegCode/Matt Seg GUI/cCellVisionFiles
+/Users/s1259407/Documents/MATLAB/MattSegCode/Matt Seg GUI/cExperiment Files
+/Users/s1259407/Documents/MATLAB/MattSegCode/Matt Seg GUI/cExperiment Files/Gal10 analysis
+/Users/s1259407/Documents/MATLAB/MattSegCode/Matt Seg GUI/cExperiment Files/hsp104 analysis
+/Users/s1259407/Documents/MATLAB/MattSegCode/Matt Seg GUI/cExperiment Files/msn2 analysis
+/Users/s1259407/Documents/MATLAB/MattSegCode/Matt Seg GUI/cExperiment Files/whi5
+/Users/s1259407/Documents/MATLAB/MattSegCode/experimentCuration
+/Users/s1259407/Documents/MATLAB/MattSegCode/experimentCuration/boundedline_20140701
+
