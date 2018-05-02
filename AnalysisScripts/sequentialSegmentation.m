@@ -845,7 +845,9 @@ end
 
 
 
+
 lower_brightfield_channel = 1; % lower z stack slice of brightfield
+
 upper_brightfield_channel = 7; % upper z stack slice of brightfield
 % 
 d.cExperiment.ActiveContourParameters.ImageTransformation.channel = [lower_brightfield_channel -upper_brightfield_channel];
