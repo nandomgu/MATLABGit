@@ -121,7 +121,7 @@ system(['mkdir ' timelapseResultsPath])
 dircontents=dir(experimentPath)
 %%this is the number of the first significant directory. the other ones are
 %%hidden, special directories like . and .. if none, assign 1.
-startingFile=4; 
+startingFile=3; 
 rootPaths={}
 resultsPaths={};
 
@@ -848,7 +848,7 @@ end
 
 
 lower_brightfield_channel = 4; % lower z stack slice of brightfield
-upper_brightfield_channel = 8; % upper z stack slice of brightfield
+upper_brightfield_channel = 7; % upper z stack slice of brightfield
 % 
 d.cExperiment.ActiveContourParameters.ImageTransformation.channel = [lower_brightfield_channel -upper_brightfield_channel];
 

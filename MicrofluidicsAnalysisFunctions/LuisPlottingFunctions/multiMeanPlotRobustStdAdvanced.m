@@ -1,4 +1,4 @@
-function [h, means, times]=multiMeanPlotRobustStdAdvanced(range, cExperiment, cmap, refzero, refone, normrange, cellchan, bgchan)
+function [h, means, times]=multiMeanPlotRobustStdAdvanced(range, cExperiment, cmap, refzero, refone, normrange, cellchan, bgchan, nms)
 %%this  multiMeanPlot uses the acquisition times coming for the log file
 %%per position. it averages the time for all positions in every column.
 
@@ -22,15 +22,19 @@ if nargin<6 || isempty(cellchan)
     cellchan=2;
 end
 
-
 drnames=cellfun(@trimPosName, cExperiment.dirs, 'UniformOutput', false);
+if nargin<9 ||isempty(nms)
 nms=unique(drnames);
-%finding the strainname of each cell
+else
+    res=iscell(nms)
+    
+    if res==0
+        error('nms must be a cell array of strings')
+    end
+end
+       %finding the strainname of each cell
 cellposes=drnames(cExperiment.cellInf(1).posNum)
 
-
-nms= nms(~strcmp(nms, 'expInf'))
-nms= nms(~strcmp(nms, 'dir'))
 
 
         
@@ -88,7 +92,7 @@ for j= 1:numel(nms)
     plot(times, normalizeTS(nonzeroColMean(cExperiment.cellInf(bgchan).mean(nmcells,range))), 'Color', cmap(j,:), 'LineWidth', 2, 'DisplayName', nms{j})
     xlabel('Time (Hrs)')
     ylabel('cy5')
-    
+    title(strrep(cExperiment.metadata.date, '_', '-'));
     subplot(3,1,2)
     hold on;
     
