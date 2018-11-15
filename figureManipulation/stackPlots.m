@@ -20,14 +20,15 @@ end
  axesHeight= totalHeight/numel(a);
  
   positions =linspace(1-axesHeight, bottomMargin, numel(a));
- 
+  axorder= fliplr(1:numel(positions))
  for j= 1:numel(positions)
      
-     set(a(j), 'Position', [0, positions(j), 1, axesHeight])
+     set(a(axorder(j)), 'Position', [0, positions(j), 1, axesHeight])
     
       if j~=numel(positions)
          
-set(a(j), 'XTickLabel', []);
+          z=get(a(axorder(j)), 'XAxis');
+          set(z, 'Visible', 'off');
 
 
       end

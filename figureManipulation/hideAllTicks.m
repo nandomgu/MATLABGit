@@ -1,5 +1,5 @@
 
-function hideAllTicks(fig)
+function hideAllTicks(fig, axnum, x, y, side)
 %ticks
 %ticks=struct;
 
@@ -7,19 +7,35 @@ if nargin<1 ||isempty(fig)
     fig=gcf;
 end
 
+
  selectAxes(fig, []);
 
-% 
+if nargin<3
+    x=1;
+    y=1;
+end
+
+if nargin<4
+    
+    side='left';
+end
+
  a=getAxes(fig);
  
- for j=1:numel(a)
-     
+if nargin<2
+axnum= 1:numel(a);
+end
+
+ for j=axnum
+     yyaxis(a(j), side);
+     if x
      nr= get(a(j), 'XAxis');
      set(nr, 'Visible', 'off')
-     
+     end
+     if y
      nr= get(a(j), 'YAxis');
      for b=1:numel(nr)
-         
+     end    
          set(nr(b), 'Visible', 'off');
      end
  end

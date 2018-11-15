@@ -1,4 +1,4 @@
-function [h, means, times]=multiMeanPlotRobustStdBasic(range, cExperiment, cmap, refgene)
+function [h, means, times, stdmch, bnds]=multiMeanPlotRobustStdBasic(range, cExperiment, cmap, refgene, cellchan, bgchan, nms, makeplot, factor)
 %%this  multiMeanPlot uses the acquisition times coming for the log file
 %%per position. it averages the time for all positions in every column.
 
@@ -13,29 +13,36 @@ function [h, means, times]=multiMeanPlotRobustStdBasic(range, cExperiment, cmap,
 %will be moving this version to one with a params structure eventually.
 
 
+if nargin<6 || isempty(bgchan) 
+   bgchan=3; 
+end
+
+if nargin<5 || isempty(cellchan) 
+   cellchan=2; 
+end
+
+
+
 
 drnames=cellfun(@trimPosName, cExperiment.dirs, 'UniformOutput', false);
-nms=unique(drnames);
 %finding the strainname of each cell
 cellposes=drnames(cExperiment.cellInf(1).posNum)
 
+if nargin<7 ||isempty(nms)
+nms=unique(drnames);  
+end
+if nargin<8 || isempty(makeplot) 
+   makeplot=1; 
+end
 
-nms= nms(~strcmp(nms, 'expInf'))
-nms= nms(~strcmp(nms, 'dir'))
+
+if sum(strcmp(cellposes, refgene))==0
+    error(['No cells were found for reference gene ' refgene '. Make sure that such strain has been extracted appropriately or choose another strain.'] );
+end
+
 
 if isempty(range)
-range=1:240;
-tmp=[];
-    for j=1:numel(nms)
-        
-        nms(j);
-        st=strjoin(['tmp= size(multichamber.' nms(j) '.cellInf(1).mean, 2);'], '')
-        eval(st);
-        disp(['tmp is ', num2str(tmp)])
-        if tmp < range(end)
-            range=1:tmp;
-        end
-    end
+range=1:size(cExperiment.cellInf(cellchan).mean, 2);
 end
         
 disp(range)
@@ -44,61 +51,121 @@ if nargin<4 || isempty(refgene)
     refmax=1
     refmin=0;
 else
-    refts=nonzeroColMean(cExperiment.(refgene).cellInf(2).mean(:,range));
+    refcells=strcmp(cellposes, refgene); %we find the cells that are the reference
+    refts=nonzeroColMean(cExperiment.cellInf(cellchan).mean(refcells,range));
     refmin=nanmin(refts);
     refmax=nanmax(refts-refmin);
+    %verification block to see refmin and refmax plotted relative to the
+    %refts
+%     figure; plot(refts); 
+%     addHLine(refmin);
+%     addHLine(nanmax(refts));
+    
+    
 end
 
-
+if makeplot==true
 h=figure;
-
+else
+    h=[];
+end
 if nargin<3 ||isempty(cmap)
 cmap= lines(20);
 end
 
+
+matr=cExperiment.cellInf(cellchan).mean;
+
+zerovals=matr==0;
+
+
+if isfield('times', cExperiment.cellInf(1))
+    times=cExperiment.cellInf(1).times;
+else
+    times=(range-1)*5/60;
+end
+    
 means=[];
 for j= 1:numel(nms)
-    eval(strjoin(['cExperiment= multichamber.' nms(j)],''));
-    
-    try
-        times=mean(cExperiment.cellInf(1).times(:, range))/60;
-    catch
-        times=(range-1)*5/60;
+    cells=strcmp(cellposes, nms{j}); 
+     
+    if numel(times)< range(end)
+        %there is this weird bug in which the times vector is shorter than
+        %the data vectors (presumably a problem in the cExp log file. we make sure to fix for this
+        range= 1:numel(times);
     end
+        
+    %catch
+        %times=(range-1)*5/60;
+    %end
     
-    
+    if makeplot==true
     subplot(3,1,1)
     hold on; 
-    plot(times, normalizeTS(nonzeroColMean(cExperiment.cellInf(3).mean(:,range))), 'Color', cmap(j,:), 'LineWidth', 2, 'DisplayName', nms{j})
-    try
-    title([sprintf([cExperiment.expInf.date '\n'])  strjoin([cExperiment.expInf.media(1) ' to ' cExperiment.expInf.media(2)])])
-    end
+    
+    plot(times, normalizeTS(nonzeroColMean(cExperiment.cellInf(bgchan).mean(cells,range))), 'Color', cmap(j,:), 'LineWidth', 2, 'DisplayName', nms{j})
     xlabel('Time (Hrs)')
     ylabel('cy5')
     
     subplot(3,1,2)
     hold on;
-    
+    end
     %thjs plot js mjnus mean(:,range)
     %plot((1:size(cExperiment.cellInf(2).mean(:,range), 2))*5/60, nonzeroColMean(cExperiment.cellInf(2).mean(:,range))-mean(:,range)(nonzeroColMean(cExperiment.cellInf(2).mean(:,range))))
-    %thjs plot js just nonzeroColmean(:,range)
-    means(j,:)=(nonzeroColMean(cExperiment.cellInf(2).mean(:,range))-refmin)/refmax;
-    boundedline(times, means(j, :), prepareBound((cExperiment.cellInf(2).mean(:,range)-refmin)/refmax, @nonZeroColSEM), 'cmap', cmap(j,:))
+    %this plot js just nonzeroColmean(:,range)
+    
+    
+    %what is happening here is that first we get the non zero mean and then
+    %we center/scale. this prevents the zeros to permeate into the
+    %calculation.
+    means(j,:)=(nonzeroColMean(cExperiment.cellInf(cellchan).mean(cells,range))-refmin)/refmax;
+    
+    
+    bnds.(nms{j})=prepareBound((cExperiment.cellInf(cellchan).mean(cells,range)-refmin)/refmax, @nonZeroColSEM);
+    
+    %if there is a factor...
+    if nargin>9 || ~isempty(factor)
+        means(j, :)= means(j,:)/factor
+        bnds.(nms{j})=prepareBound(((cExperiment.cellInf(cellchan).mean(cells,range)-refmin)/refmax)/factor, @nonZeroColSEM);
+    end
+    
+    if makeplot==true
+    boundedline(times, means(j, :),bnds.(nms{j}), 'cmap', cmap(j,:));
     xlabel('Time (Hrs)')
     ylabel('Mean cell FL (±SEM)')
     subplot(3,1,3)
     hold on;
+    
+    
     o=1; 
-    try plot(times, zero2NaN(cExperiment.cellInf(2).mean(xNaNIndices(cExperiment),range))', ':', 'Color', cmap(j,:));  
-    catch  ME 
-        plot(times, zero2NaN(cExperiment.cellInf(2).mean(:,range))', ':', 'Color', cmap(j,:));  end 
+    plot(times, zero2NaN(cExperiment.cellInf(cellchan).mean(cells,range))', ':', 'Color', cmap(j,:));  
+    
     
     
     xlabel('Time (Hrs)')
     ylabel('Individual cell FL')
+    
+    end
 end
 
 
+
+%matr2=matr;
+
+ %we get rid of the alues that were zeros, which became an annoying constant
+
+cExperiment.cellInf(cellchan).mean=((matr(:,range))-refmin)/refmax;
+cExperiment.cellInf(cellchan).mean(zerovals)=NaN;
+if nargin>9 || ~isempty(factor)
+cExperiment.cellInf(cellchan).mean=cExperiment.cellInf(cellchan).mean/factor
+end
+%figure; plot(cExperiment.cellInf(cellchan).mean(nmcells, range)'); title('after')
+stdmch=makeMultiChamber(cExperiment);
+%replace the transformed data with the original unaltered data
+cExperiment.cellInf(cellchan).mean=matr;
+
+%figure; plot(cExperiment.cellInf(cellchan).mean(nmcells, range)'); title('back to normal')
+debug=1;
 
 
     

@@ -2,17 +2,20 @@ function [val, err, valpercell]= meanFLRateWindow(range, cExperiment, extraction
 %% this function computes an operatin for cExperiment in the whole range, but then computes only using extractionrange. this allows to keep consistency 
 %%of values when working on range sensitive operations such as maxima, times, or time dependent operators.
 
-if nargin < 3
+if nargin < 3 || isempty(extractionRange)
 extractionRange=range;
 
 end
+
+disp(['matr has ' num2str(size(cExperiment.cellInf(cellchan).mean,2)) 'timepoints. range: ' num2str(extractionRange(1)),  ' ', num2str(extractionRange(end))])
+
 if(nargin<4)
 
 cellchan=2;
 
 end
-
-matr=smoothDeriveAllCells(cExperiment.cellInf(cellchan).mean(xNaNIndices(cExperiment), range));
+                                                              %xNaNIndices(cExperiment) to treat cells with less than 5 nans                          
+matr=smoothDeriveAllCells(cExperiment.cellInf(cellchan).mean(:, range));
 %figure; plot(matr');
 
  

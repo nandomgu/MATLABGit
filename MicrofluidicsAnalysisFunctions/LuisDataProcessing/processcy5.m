@@ -1,11 +1,17 @@
-function [newcy5mean, nms, times]=processcy5(multichamber, rng)
+function [newcy5mean, nms, times]=processcy5(multichamber, rng, chan)
 nms=fieldnames(multichamber);
 nms= nms(~strcmp(nms, 'expInf'))
 nms= nms(~strcmp(nms, 'dir'))
 
 
+
+if nargin<3 ||isempty(chan)
+  chan=3;  
+end
+
+
 if nargin<2 ||isempty(rng)
-   rng= 1:size(multichamber.(nms{1}).cellInf(3).mean, 2);
+   rng= 1:size(multichamber.(nms{1}).cellInf(chan).mean, 2);
     
 end
 
@@ -14,15 +20,15 @@ try
     times=nanmean(multichamber.(nms{1}).cellInf(1).times/60);
 catch
     disp('experiment likely does not contain time variable. defaulting to hours in 5 minute intervals')
-    len=size(multichamber.(nms{1}).cellInf(2).mean,2);
+    len=size(multichamber.(nms{1}).cellInf(1).mean,2);
     times=(1:len)*5/60;
 end
 
 cy5mean=[];
-disp([nms{:}])
+%disp([nms{:}])
 for j=1:numel(nms)
-    disp(j)
-    cy5mean(j,:)=nonzeroColMean(multichamber.(nms{j}).cellInf(3).imBackground(:, rng));
+   % disp(j);
+    cy5mean(j,:)=nonzeroColMean(multichamber.(nms{j}).cellInf(chan).imBackground(:, rng));
 
 
     
@@ -47,9 +53,9 @@ nanmsk= zscores>2;
 newcy5mean=[];
 for j =1:numel(nms)
     %%interpolating the values where there were glitches
-    tc=cy5mean(j,:) %temporary cy5 mean
+    tc=cy5mean(j,:); %temporary cy5 mean
     %using non gitch points as an interpolation ref 
-    newcy5mean(j,:)= interp1(times(nanmsk(j,:)==0),  tc(nanmsk(j,:)==0), times) 
+    newcy5mean(j,:)= interp1(times(nanmsk(j,:)==0),  tc(nanmsk(j,:)==0), times) ;
     %figure; plot(times, newcy5mean(j,:))
 
 end

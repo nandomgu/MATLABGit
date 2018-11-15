@@ -17,9 +17,9 @@ matr=full(cExperiment.cellInf(cellchan).mean);
 
 
 submatr=matr(:, extractionRange); 
-valpercell= mean(submatr,2)';
-val= mean(mean(submatr));
-err= std(reshape(submatr, 1, numel(submatr)) );
+valpercell= nanmean(submatr,2)';
+val= nanmean(submatr(:));
+err= nanstd(reshape(submatr, 1, numel(submatr)) );
 
 %figure; plot(matr');
 

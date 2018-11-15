@@ -102,6 +102,14 @@ else
     usealpha = false;
 end
 
+
+%%Addition by Luis... DisplayName. watch out... not scalable for everly line.
+isDisplayName = cellfun(@(x) ischar(x) && strcmp(x, 'displayName'), varargin);
+if any(isDisplayName)
+    displayName= varargin(find(isDisplayName)+1)
+else
+    displayName=[]
+end
 % Axis
 
 isax = cellfun(@(x) isscalar(x) && ishandle(x) && strcmp('axes', get(x,'type')), varargin);
@@ -326,8 +334,14 @@ for iln = 1:nline
     hp(iln) = patch(xp{iln}, yp{iln}, ptchcol{iln}, 'facealpha', alpha{iln}, 'edgecolor', 'none');
 end
 
+
 for iln = 1:nline
+   
+    if displayName
+    hl(iln) = line(xl{iln}, yl{iln}, 'marker', marker{iln}, 'linestyle', lnsty{iln}, 'color', lncol{iln}, 'DisplayName', displayName);
+    else
     hl(iln) = line(xl{iln}, yl{iln}, 'marker', marker{iln}, 'linestyle', lnsty{iln}, 'color', lncol{iln});
+    end
 end
 
 %--------------------

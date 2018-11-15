@@ -1,18 +1,12 @@
-function showTicks(fig)
+function showTicks(ax, dim)
+if nargin<2 || isempty(dim)
+    dim=1;
+end
 
-w=whichSelected(fig);
-
-a=getAllAxes(fig);
-a=a(w);
-
- for j=1:numel(a)
-     
-     nr= get(a(j), 'XAxis');
-     set(nr, 'Visible', 'on')
-     
-     nr= get(a(j), 'YAxis');
-     for b=1:numel(nr)
-         
-         set(nr(b), 'Visible', 'on');
-     end
- end
+if dim==1
+nr= get(ax, 'XAxis');set(nr, 'Visible', 'on')
+else
+    if dim==2
+    nr= get(ax, 'YAxis');set(nr, 'Visible', 'on')
+    end
+end

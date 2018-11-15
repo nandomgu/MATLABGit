@@ -1,10 +1,9 @@
 function result=nonZeroColStd(matrix)
 
+matrix(matrix==0)=NaN; %deal with nans rather than zeros)
 
-for i= 1:size(matrix,2)
-    
-    result(i)= std(matrix(find(matrix(:,i)~=0), i));
-    
-end
+
+result=nanstd(matrix); %take advantage of the nanstd function
+
 
 end

@@ -2,13 +2,15 @@ function [mn, nms, times]=processNucLocFoldChangeBasic(cExperiment, nms, rng,bas
 %% this function receives a cExperiment rather than a multichamber object and figures out the 
 %%strains and positions. it is more autonomous this way.
 
-%%nms is a cell array of strings
-
-if nargin<2 ||isempty(nms)
+%%getting the positions' strain names
 drnames=cellfun(@trimPosName, cExperiment.dirs, 'UniformOutput', false);
-nms=unique(drnames);
+
 %finding the strainname of each cell
 cellposes=drnames(cExperiment.cellInf(1).posNum) 
+
+
+if nargin<2 ||isempty(nms) %we get the names for which there are cells.
+nms=unique(cellposes);
 end
 
 if nargin< 4 || isempty(baserange)
