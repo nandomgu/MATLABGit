@@ -29,12 +29,24 @@ for j=1:numel(poses)
     pause(.5)
     tprogress(j/numel(poses))
     for k=1:tms %for each timepoint  
-        im=ct.returnSingleTimepointRaw(k, whichChannelsMatch);
+        %disp(k)
+        try
+        im=ct.returnSingleTimepoint(k, whichChannelsMatch);
+        im=im(1:512,1:512);
         med(j, k)= median(im(:));
         mn(j, k)= mean(im(:));
         sd(j, k)= std(double(im(:)));
         mx(j, k)= max(im(:));
         miin(j, k)= min(im(:));
+        
+        catch
+        med(j, k)= NaN;
+        mn(j, k)= NaN;
+        sd(j, k)= NaN;
+        mx(j, k)= NaN;
+        miin(j, k)= NaN;
+        end
+
 end
 end
 

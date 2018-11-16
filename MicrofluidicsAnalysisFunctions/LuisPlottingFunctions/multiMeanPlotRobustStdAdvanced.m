@@ -112,6 +112,7 @@ for j= 1:numel(nms)
     subplot(3,1,1)
     hold on; 
     plot(times, normalizeTS(nonzeroColMean(cExperiment.cellInf(bgchan).mean(nmcells,range))), 'Color', cmap(j,:), 'LineWidth', 2, 'DisplayName', nms{j})
+    title(strrep(cExperiment.metadata.date, '_', '-'))
     xlabel('Time (Hrs)')
     ylabel('cy5')
     title(strrep(cExperiment.metadata.date, '_', '-'));

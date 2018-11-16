@@ -727,11 +727,10 @@ cExperiment = d.cExperiment;
 %channels = {'GFP_001','cy5','Brightfield_001','Brightfield_002','Brightfield_004','Brightfield_005', 'GFP_002', 'GFP_003', 'GFP_004', 'GFP_005'};
 channels = {'GFP','cy5','Brightfield_001','Brightfield_002','Brightfield_004','Brightfield_005', 'GFPFast_001', 'GFPFast_002', 'GFPFast_003', 'GFPFast_004', 'GFPFast_005'};
 
-for chi=1:length(channels)
-    d.cExperiment.addSecondaryChannel(channels{chi});
-end
 
+d.cExperiment.addSecondaryChannel(channels);
 
+set(d.selectChannelButton, 'String', d.cExperiment.channelNames, 'Value', 1)
 
 
 %% set TP to process
@@ -839,7 +838,6 @@ d.cExperiment.identifyTrapsTimelapses(d.cExperiment.cCellVision)
 figure
 allchannels= {d.cExperiment.searchString, d.cExperiment.channelNames}
 for j=1:numel(d.cExperiment.channelNames)
-    
 subplot(1,numel(d.cExperiment.channelNames),j)
 imshow(d.cExperiment.returnTimelapse(1).returnSingleTimepoint(1, j), [])
 title(d.cExperiment.channelNames{j});
@@ -847,7 +845,9 @@ end
 
 
 
-lower_brightfield_channel = 4; % lower z stack slice of brightfield
+
+lower_brightfield_channel = 1; % lower z stack slice of brightfield
+
 upper_brightfield_channel = 7; % upper z stack slice of brightfield
 % 
 d.cExperiment.ActiveContourParameters.ImageTransformation.channel = [lower_brightfield_channel -upper_brightfield_channel];

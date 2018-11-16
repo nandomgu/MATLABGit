@@ -22,8 +22,16 @@
 % plot(X,Y,'linewidth',5)
 % ylim([-1.1 1.1]);
 % 
-%SIMPLER LINE COLOR EXAMPLE
-
+% SIMPLER LINE COLOR EXAMPLE
+% N = 6; X = linspace(0,pi*3,1000);
+% C = linspecer(N)
+% hold off;
+% for ii=1:N
+%     Y = sin(X+2*ii*pi/N);
+%     plot(X,Y,'color',C(ii,:),'linewidth',3);
+%     hold on;
+% end
+% 
 % COLORMAP EXAMPLE
 % A = rand(15);
 % figure; imagesc(A); % default colormap
