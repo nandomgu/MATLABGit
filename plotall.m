@@ -21,6 +21,18 @@ k=k+3;
 end
 stackPlots(gcf)
 
+        disp('plotting sugar')
+        allaxes=get(gcf, 'children')
+        for j=1:numel(allaxes)
+      
+            axes(allaxes(j))
+            yyaxis right
+        area( t, argsim.input, 'FaceAlpha', 0.1, 'FaceColor', [1, .6, 0], 'EdgeColor', 'none'); 
+        yyaxis left
+        
+        end
+       
+
 %%
 axes(); k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2))));k=k+3;axes(); plot(real(y(:, k:(k+2)))); stackPlots(gcf)
 

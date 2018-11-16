@@ -45,7 +45,7 @@ sim=func(pars,params);
 
 [tf, yf]=ode113(sim, times, params.initialconditions.*(params.initialconditions>0), modelFeatures.options);
 
-
+yf=real(yf);
 yout=yf(:, params.outvar);
 
 % try

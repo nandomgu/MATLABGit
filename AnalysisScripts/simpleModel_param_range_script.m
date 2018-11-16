@@ -903,7 +903,7 @@ end
       
             axes(allaxes(j))
             yyaxis right
-        area( synthtimes, argsim.input, 'FaceAlpha', 0.1, 'FaceColor', [1, .6, 0], 'EdgeColor', 'none'); 
+        area( t, argsim.input, 'FaceAlpha', 0.1, 'FaceColor', [1, .6, 0], 'EdgeColor', 'none'); 
         yyaxis left
         
         end
