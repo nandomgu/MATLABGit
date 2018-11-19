@@ -85,6 +85,7 @@ allbics(j,:)=[testbic1, testbic2, testbic3, testbic4, testbic5, testbic6, testbi
 end
 
 %%
+ hxts={'Hxt1', 'Hxt2', 'hxt3', 'Hxt4', 'hxt5', 'Hxt6', 'Hxt7'}
 selectedmodels=[1,6,7];
 figure; bar(allbics(:, selectedmodels));
 linspecs={'^-',    's-',    'o-',    '-+' ,   '-*',    '-x',    '-d',    'r:'}
@@ -99,7 +100,7 @@ set(gca, 'Yscale', 'log')
 [a,b]=nanmin(allbics(:, selectedmodels),[], 2);
 figure; 
 
-for j= 1:7 %number of hxts
+for j= [1 4 7] %number of hxts
     
   l=1:numel(y.(genes{j}).(models{selectedmodels(b(j))}))
   plot(tims(l)', y.(genes{j}).(models{selectedmodels(b(j))}), lls{b(j)}, 'LineWidth', 1.5, 'DisplayName', [genes{j} ' ' models{selectedmodels(b(j))}], 'Color', straincolors(j, :),  'MarkerIndices', 1:10:250);hold on;

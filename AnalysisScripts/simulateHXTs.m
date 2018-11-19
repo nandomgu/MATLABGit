@@ -163,9 +163,10 @@ axes()
 save('fitsModels56.mat', 'meandata', 'trialparams', 'fitparams', 'fval')
 
 %% just plotting
-models={ 'simpleModel1', 'simpleModel2', 'simpleModel3','simpleModel4', 'simpleModel5','simpleModel6','simpleModel7'};
+%models={ 'simpleModel1', 'simpleModel2', 'simpleModel3','simpleModel4', 'simpleModel5','simpleModel6','simpleModel7'};
+models={ 'simpleModel1','simpleModel6','simpleModel7'};
 
-linspecs= {'k^-', 'ks-', 'ko-', 'k-+', 'k-*', 'k-x','k-d','r:'}
+linspecs= {'k^-', 'ks-', 'ko-', 'k-+', 'k-*', 'k-x','k-d','ro'}
 figure; 
 y=struct;
 d=struct;
@@ -184,7 +185,7 @@ axes()
          
         %data=meandataramp.(genes{j}).(ramptype);
         data(data==0)=NaN;
-        ramp=locdataramps.cy5(2,:);
+        %ramp=locdataramps.cy5(2,:);
         %argsim.input=ramp;
          %mat=locdataramps.mig1g.(ramptype).rep2;
          %mig1 localisation trace. ramp6h
@@ -255,7 +256,7 @@ axes()
         
     end
         h=randi(30,1);
-    plot(t,d.(genes{j}), linspecs{8}, 'DisplayName', 'Data mean of means', 'LineWidth', 4,'MarkerIndices', 1:10:250);
+    plot(t,d.(genes{j}), linspecs{8}, 'DisplayName', 'Data mean of means', 'LineWidth', .5,'MarkerIndices', 1:250);
     yyaxis right;
     plot(t,argsim.input, 'DisplayName', 'Glucose');
     title(genes{j})
