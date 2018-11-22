@@ -15,7 +15,7 @@ params.times= times;
 func=eval(['@' modelName ';'])
 handle= @rampSim;
 if lsq
-    outfun=@(y,d) sum((y-d).^2) ;
+    outfun=@(y,d) nansum((y-d).^2) ;
 else
     outfun=@(y,d) y-d;
 end

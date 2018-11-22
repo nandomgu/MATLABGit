@@ -176,7 +176,7 @@ axes()
     for m=1:numel(models)  
 
         mf=extractModelFeatures(models{m});
-        argsim=struct;
+        %argsim=struct;
         
           data=meandata.(genes{j}).g1percent;
           mat=locdata.mig1g.g1percent.rep1.data;
@@ -407,7 +407,7 @@ set(l, 'String', s)
 
 %% BIC bar plot
 %[l,t,y]=simulator(x); figure; plot(t,y); hold on; plot(t,d);
-s= {'1.- Gluc activation',    '1+ gluc. induced degradation' ,   '1+ gluc. repressed degradation' ,   'gluc activation  + hill gluc repression ',  'hill gluc activation + Mig1 induced repression', 'hill gluc activation+ hill gluc repression', 'hill gluc activation+ hill gluc repression+ hill gluc repressed degradation'};
+s= {' Gluc activation',    '1+ gluc. induced degradation' ,   '1+ gluc. repressed degradation' ,   'gluc activation  + hill gluc repression ',  'hill gluc activation + Mig1 induced repression', ' activation+  repression', 'activation+ repression+ gluc repressed degradation'};
 sumbic=@(model) [ BIC.hxt1.(model), BIC.hxt2.(model), BIC.hxt3.(model), BIC.hxt4.(model), BIC.hxt5.(model), BIC.hxt6.(model), BIC.hxt7.(model)]
 figure;
 subplot(1,3,1)

@@ -20,7 +20,7 @@ hold on;
 k=k+3;
 end
 stackPlots(gcf)
-
+%%
         disp('plotting sugar')
         allaxes=get(gcf, 'children')
         for j=1:numel(allaxes)

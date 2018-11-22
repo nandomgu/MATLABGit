@@ -198,7 +198,9 @@ bgchan=3;
 %if size(cExperiment.cellInf(bgchan).mean,2)>= 250
 
     cy5(n, :)= topUp(normalizeTS(nonzeroColMean(cExperiment.cellInf(bgchan).mean)), 250);
-%end
+
+    
+    %end
 drnames=cellfun(@trimPosName, cExperiment.dirs, 'UniformOutput', false);
 disp('getting experiment''s strain names')
 allnms{n}=unique(cellfun(@trimPosName, cExperiment.dirs, 'UniformOutput', false))
@@ -247,7 +249,7 @@ end
 
 mrkrs= ['o', '+', '^','x', 's', '*', 'v'];
 
-
+%distinct colors for each HXT
 straincolors=[
  0 0.8 0.8;
  0 0 0.5;
@@ -257,6 +259,8 @@ straincolors=[
  0.3 0.3 0.3;
  0 0.5 0
 ]
+
+
 
 refstrain='hxt4' %make [] if unwanted
 refrange=[1:30]   % make [] if unwanted
@@ -291,7 +295,7 @@ plotcons=[ 1]; % just interested in 1% for now
 flag=0
   figure;
  mod=1 ;
-for q=1:numel(strains)
+for q=[1 2 5 6 7]%1:numel(strains)
  % subplot(numel(strains), 1, q); when plotting per concentration
 for j=1:numel(plotcons)
       nam=['g' strrep(strrep(num2str(plotcons(j)), '.', 'p'), '0', '') 'percent'] %the name of the condition to name data structures
@@ -301,7 +305,7 @@ for j=1:numel(plotcons)
 
 containsStrain = @(nms,str) sum(strcmp(nms, str))>0;
 sCon=cell2mat(cellfun(containsStrain, repmat(allnms, numel(strains(q)), 1), repmat(strains(q)', 1, numel(exptList)), 'UniformOutput', false));
-
+cy5tree.(strains{q})=cy5(sCon, :);
 concentrations=[currentfolders{:,2}];
  exptchoice=exptList(sCon);  
  colorchoice=cmap(sCon, :);
@@ -339,7 +343,14 @@ concentrations=[currentfolders{:,2}];
               [h, means, times, stdmch, bnds]=multiMeanPlotRobustStdBasic([], cExperiment, [], refstrain , chan,3, {strn, 'hxt4'}, 0, 0.22);
                   end
               end
-        %%       
+        %if q==3   
+         allsplits=strsplit(conlist{k}, '/'); expname= allsplits(end-1);
+         multiMeanPlotRobust3([], stdmch, colstruct)   
+         title(expname);
+         disp('pausing')
+         %pause(30)
+        %end   
+              %%
         disp('plotting sugar')
         if fl==0
             yyaxis right
@@ -347,7 +358,10 @@ concentrations=[currentfolders{:,2}];
         yyaxis left
         fl=1;
         end
-        %% 
+        
+       
+        
+        %%
         disp('making the boundedline plot')
         boundedline(times, means(1,:),bnds.(strn), 'cmap', straincolors(q, :), 'transparency', 0.1, 'alpha');
        %inputdlg('')
@@ -478,12 +492,12 @@ set(a(j), 'Visible', 'on')
 %set(a(j), 'MarkerSize', 8)
 %set(a(j), 'MarkerIndices', 1:10:250)
 set(a(j), 'LineStyle', '-')
-set(a(j), 'Color', [.2 .2 .2])
-set(a(j), 'MarkerEdgeColor', [0 0 0])
+%set(a(j), 'Color', [.2 .2 .2])
+%set(a(j), 'MarkerEdgeColor', [0 0 0])
 c=c+1;
 end
 if isa(a(j), 'matlab.graphics.primitive.Patch')
-set(a(j), 'FaceAlpha', 0.5)
+set(a(j), 'FaceAlpha', 0.2)
 end
 end
 end
