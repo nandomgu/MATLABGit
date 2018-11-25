@@ -65,3 +65,18 @@ paramtable=table(tab.Properties.VariableNames',  tab{1, :}', 'VariableNames', {'
       hillrepHMG: 0
         KrepM2MT: -2.8134
      hillrepM2MT: 0.6931
+
+     
+     
+%% simple models formatting
+VHXT=params(1);
+KHXT=params(2);
+hillHXT=params(3);
+KdegHXT=params(4);
+
+syms HXT VHXT KHXT hillHXT KdegHXT glu
+
+latex((VHXT*(glu)^hillHXT /(KHXT^hillHXT+glu^hillHXT)) -KdegHXT*HXT )
+
+     
+     

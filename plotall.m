@@ -9,18 +9,18 @@ lw=1.5
 while k<18
 axes(); 
 j=0; 
-plot(t, real(y(:, k+j)), 'color', concolors(j+1,:), 'LineWidth', lw);
+plot(t, real(yall(:, k+j)), 'color', concolors(j+1,:), 'LineWidth', lw);
 hold on;
 j=j+1
-plot(t,real(y(:, k+j)), 'color', concolors(j+1,:), 'LineWidth', lw);
+plot(t,real(yall(:, k+j)), 'color', concolors(j+1,:), 'LineWidth', lw);
 hold on;
 j=j+1
-plot(t,real(y(:, k+j)), 'color', concolors(j+1,:), 'LineWidth', lw);
+plot(t,real(yall(:, k+j)), 'color', concolors(j+1,:), 'LineWidth', lw);
 hold on;
 k=k+3;
 end
 stackPlots(gcf)
-%%
+
         disp('plotting sugar')
         allaxes=get(gcf, 'children')
         for j=1:numel(allaxes)

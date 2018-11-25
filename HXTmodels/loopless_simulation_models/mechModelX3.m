@@ -1,14 +1,8 @@
 
-function modelh= mechModelX(params, args)
+function modelh= mechModelX3(params, args)
 
-description=['mechModel10- glucose deg mth1'  ...
-             'glucose deg std1'...
-             'mth1 rep Std1' ...
-             'std1 inhibits mig1' ...
-             'Mig1, Mth1, AND Std1 repress hxt'...
-             'Mig2 is controled by Mth1'...
-             'Mig2 represses Mth1. also substituting that for Mig1 here. '...
-             'Mig2 leaves the nucleus by means independent of Std1'
+description=['based on mechModelX'...
+             'Std1 only inhibits Mig1, not Mig2. KinhSM2 is not used'...
              ];
              
              
@@ -109,7 +103,7 @@ deg=VdegHXT/(1+ (Glucose/threshdegHXT)^hilldegHXT)+basaldeg;
 DMTH1= 1/ (1 + (MIG2/KrepM2MT)^hillrepM2MT)  - (degMT+ basaldegMT)*MTH1 ;
 DMIG1= Vloc*cytMIG1*(Glucose/KMG)^hillMG/(1 + (Glucose/KMG)^hillMG) -deloc*MIG1 -KinhSMG*STD1*MIG1;
 DSTD1= 1/(1+(MTH1/KrepMTST)^hillrepMTST) - (degST+ basaldegST)*STD1 ;
-DMIG2= 1/(1+ (MTH1/KrepSTM2)^hillrepSTM2) -KinhSM2*STD1*MIG2 -basaldegM2*MIG2   -  (VinactGM2 / (1 + (Glucose/KinactGM2)^hillinactGM2))*MIG2; 
+DMIG2= 1/(1+ (MTH1/KrepSTM2)^hillrepSTM2) -basaldegM2*MIG2   -  (VinactGM2 / (1 + (Glucose/KinactGM2)^hillinactGM2))*MIG2; 
 DHXT=VHXT/ (1+ (MIG1/KrepHMG)^hillHMG +(MTH1/KrepHMT)^hillHMT +(MIG2/KrepHM2)^hillrepHM2 +(STD1/KrepHST)^hillrepHST) - deg*HXT;
 
 end
@@ -123,7 +117,7 @@ deg=VdegHXT/(1+ (Glucose/threshdegHXT)^hilldegHXT)+basaldeg;
 DMTH1= 1/ (1 + (MIG2/KrepM2MT)^hillrepM2MT)  - (degMT+ basaldegMT)*MTH1 ;
 DMIG1= Vloc*cytMIG1*(Glucose/KMG)^hillMG/(1 + (Glucose/KMG)^hillMG) -deloc*MIG1 -KinhSMG*STD1*MIG1;
 DSTD1= 1/(1+(MTH1/KrepMTST)^hillrepMTST) - (degST+ basaldegST)*STD1 ;
-DMIG2= 1/(1+ (MTH1/KrepSTM2)^hillrepSTM2) -KinhSM2*STD1*MIG2 -basaldegM2*MIG2   -  (VinactGM2 / (1 + (Glucose/KinactGM2)^hillinactGM2))*MIG2; 
+DMIG2= 1/(1+ (MTH1/KrepSTM2)^hillrepSTM2)  -basaldegM2*MIG2   -  (VinactGM2 / (1 + (Glucose/KinactGM2)^hillinactGM2))*MIG2; 
 DHXT=VHXT/ (1+ (MIG1/KrepHMG)^hillHMG +(MTH1/KrepHMT)^hillHMT +(MIG2/KrepHM2)^hillrepHM2 +(STD1/KrepHST)^hillrepHST) - deg*HXT;
 
  
@@ -138,7 +132,7 @@ deg=VdegHXT/(1+ (Glucose/threshdegHXT)^hilldegHXT)+basaldeg;
 DMTH1= 1/ (1 + (MIG2/KrepM2MT)^hillrepM2MT)  - (degMT+ basaldegMT)*MTH1 ;
 DMIG1= Vloc*cytMIG1*(Glucose/KMG)^hillMG/(1 + (Glucose/KMG)^hillMG) -deloc*MIG1 -KinhSMG*STD1*MIG1;
 DSTD1= 1/(1+(MTH1/KrepMTST)^hillrepMTST) - (degST+ basaldegST)*STD1 ;
-DMIG2= 1/(1+ (MTH1/KrepSTM2)^hillrepSTM2) -KinhSM2*STD1*MIG2 -basaldegM2*MIG2   -  (VinactGM2 / (1 + (Glucose/KinactGM2)^hillinactGM2))*MIG2; 
+DMIG2= 1/(1+ (MTH1/KrepSTM2)^hillrepSTM2)  -basaldegM2*MIG2   -  (VinactGM2 / (1 + (Glucose/KinactGM2)^hillinactGM2))*MIG2; 
 DHXT=VHXT/ (1+ (MIG1/KrepHMG)^hillHMG +(MTH1/KrepHMT)^hillHMT +(MIG2/KrepHM2)^hillrepHM2 +(STD1/KrepHST)^hillrepHST) - deg*HXT;
 
  

@@ -199,6 +199,12 @@ bgchan=3;
 
     cy5(n, :)= topUp(normalizeTS(nonzeroColMean(cExperiment.cellInf(bgchan).mean)), 250);
 
+    hillfactor=10; 
+    hill = @(input)   input^hillfactor/(thresh^hillfactor+ input^hillfactor); 
+    %figure; plot(arrayfun(hill, glucose))
+    tmpinput=arrayfun(hill, cy5(n, :));
+    fprintf(fopen([currentfolders{n, 1} '_input.txt'], 'w'),'%3.3f , %3.3f\n', [times(1:230)',  tmpinput(1:230)']')
+
     
     %end
 drnames=cellfun(@trimPosName, cExperiment.dirs, 'UniformOutput', false);
@@ -295,7 +301,7 @@ plotcons=[ 1]; % just interested in 1% for now
 flag=0
   figure;
  mod=1 ;
-for q=[1 2 5 6 7]%1:numel(strains)
+for q=1:numel(strains)
  % subplot(numel(strains), 1, q); when plotting per concentration
 for j=1:numel(plotcons)
       nam=['g' strrep(strrep(num2str(plotcons(j)), '.', 'p'), '0', '') 'percent'] %the name of the condition to name data structures
@@ -345,9 +351,13 @@ concentrations=[currentfolders{:,2}];
               end
         %if q==3   
          allsplits=strsplit(conlist{k}, '/'); expname= allsplits(end-1);
-         multiMeanPlotRobust3([], stdmch, colstruct)   
+         %multiMeanPlotRobust3([], stdmch, colstruct)   
          title(expname);
          disp('pausing')
+         tmpmn=nanmean(stdmch.(strains{q}).cellInf(chan).mean)';
+         tmpsd=nanstd(stdmch.(strains{q}).cellInf(chan).mean)';
+         fprintf(fopen(strjoin(['experiment_' expname '_' strains{q} '_data.txt'] , ''), 'w'),'%3.3f ,%3.3f, %3.3f\n', [times(1:230)',  tmpmn(1:230), tmpsd(1:230)]')
+         
          %pause(30)
         %end   
               %%
