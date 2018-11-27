@@ -161,7 +161,7 @@ end
 modell='mechModelX1';
 modelopt=struct;
 modelmatrix=[];
-argsim.opts2.MaxIter=50;
+argsim.opts2.MaxIter=100;
 simulator=makesimulatorX(modell, argsim);
 v=find(modelcosts(:,find(strcmp(modelnames, modell)))>0);  [a,b]= sort(modelcosts(v, 2)); x2=parmat(b(2), :)
 
@@ -178,7 +178,7 @@ modelmatrix(j,:)=fminsearch(simulator, pars+randn(1, numel(argsim.mf.paramNames)
 end
 
 modelopt.(modell)=modelmatrix;
-save(strjoin('/Users/s1259407/Documents/MATLABGIT/', modell ,'.mat', ''),  'modelmatrix');
+save(strjoin({'/Users/s1259407/Documents/MATLABGIT/modelmatrix_', modell ,'.mat'}, ''),  'modelmatrix');
 end
 
 
