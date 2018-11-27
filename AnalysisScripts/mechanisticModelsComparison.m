@@ -11,9 +11,10 @@ paramsetname='x1hybrid';
 modelcosts= zeros(size(parmat,1), 7);
 paramsfile=fopen('trialparams_laptop.txt', 'a');
 costsfile=fopen('mechmodelcosts_laptop.txt', 'a');
+modelnames={'mechModelX', 'mechModelX1','mechModelX2','mechModelX3','mechModelX4','mechModelX5','mechModelX6','mechModelX7'}
 fprintf(paramsfile,['param_names' '\t' repmat(' %s\t', 1, size(parmat,2))], mf.paramNames{:});  %3.3f, %3.3f,%3.3f,%3.3f,%3.3f,%3.3f\n', modelcosts(q, :));         
 fprintf(costsfile,[ 'modelnames\t' repmat('%s\t', 1, numel(modelnames))], modelnames{:});  %3.3f, %3.3f,%3.3f,%3.3f,%3.3f,%3.3f\n', modelcosts(q, :));         
-
+inits=argsim.initialconditions;
 %fclose(paramsfile)
 letters = num2cell('a':'z');
 numbers = string(1:9)
@@ -59,7 +60,7 @@ modelnames{j}= modell;j=j+1;
 end
 argsim.onlyparams= [1:31 33:37];
 simulator=makesimulatorX(modell, argsim);
-costs.(modell)=simulator(refparams);
+%costs.(modell)=simulator(refparams);
 modelcosts(q, 4)= simulator(parmat(q, :));
 %%Std1 only inhibits Mig2. KinhSM1 inactive
 
@@ -69,7 +70,7 @@ modelnames{j}= modell;j=j+1;
 end
 argsim.onlyparams= [1:13 15:37];
 simulator=makesimulatorX(modell, argsim);
-costs.(modell)=simulator(refparams);
+%costs.(modell)=simulator(refparams);
 modelcosts(q, 5)= simulator(parmat(q, :));
 
 %%Std1 does not inhibit any migs
@@ -80,7 +81,7 @@ modelnames{j}= modell;j=j+1;
 end
 argsim.onlyparams= [1:13 15:31  33:37];
 simulator=makesimulatorX(modell, argsim);
-costs.(modell)=simulator(refparams);
+%costs.(modell)=simulator(refparams);
 modelcosts(q, 6)= simulator(parmat(q, :));
 %%Std1 is not a repressor
 
@@ -90,7 +91,7 @@ modelnames{j}= modell;j=j+1;
 end
 argsim.onlyparams= [1:19  22:37];
 simulator=makesimulatorX(modell, argsim);
-costs.(modell)=simulator(refparams);
+%costs.(modell)=simulator(refparams);
 modelcosts(q, 7)= simulator(parmat(q, :));
 
 modell='mechModelX7';
@@ -98,12 +99,13 @@ if q==1
 modelnames{j}= modell;j=j+1;
 end
 argsim.onlyparams= [1:8  11:37];
+argsim.initialconditions(7)=1;
 simulator=makesimulatorX(modell, argsim);
-costs.(modell)=simulator(refparams);
-modelcosts(q, 7)= simulator(parmat(q, :));
-
+%costs.(modell)=simulator(refparams);
+modelcosts(q, 8)= simulator(parmat(q, :));
+argsim.initialconditions=inits;
 %for q=1:size(parmat, 1)
-fprintf(fopen('trialparams_laptop.txt', 'a'),['\n' 'paramset_%s' '\t' repmat(' %3.3f\t', 1, size(parmat,2))], id, parmat(q, :));  %3.3f, %3.3f,%3.3f,%3.3f,%3.3f,%3.3f\n', modelcosts(q, :));         
+fprintf(paramsfile,['\n' 'paramset_%s' '\t' repmat(' %3.3f\t', 1, size(parmat,2))], id, parmat(q, :));  %3.3f, %3.3f,%3.3f,%3.3f,%3.3f,%3.3f\n', modelcosts(q, :));         
 % if q==1
 % fprintf(costsfile,[ 'modelnames\t' repmat('%s\t', 1, numel(modelnames))], modelnames{:});  %3.3f, %3.3f,%3.3f,%3.3f,%3.3f,%3.3f\n', modelcosts(q, :));         
 % end
@@ -129,4 +131,57 @@ end
  set(gca, 'XTickLabels', modelnames)
  title(paramsetname)
  
+ 
+ 
+%% rerunning all mechmodelX6 and mechModelX7 . last q=    
+for q=359:382
+    
+modell='mechModelX6';
+argsim.onlyparams= [1:19  22:37];
+simulator=makesimulatorX(modell, argsim);
+%costs.(modell)=simulator(refparams);
+modelcosts(q, 7)= simulator(parmat(q, :));
+
+
+modell='mechModelX7';
+if q==1
+modelnames{j}= modell;j=j+1;
+end
+argsim.onlyparams= [1:8  11:37];
+argsim.initialconditions(7)=1;
+simulator=makesimulatorX(modell, argsim);
+%costs.(modell)=simulator(refparams);
+modelcosts(q, 8)= simulator(parmat(q, :));
+argsim.initialconditions=inits;
+
+end
+
+
+%%
+modell='mechModelX1';
+modelopt=struct;
+modelmatrix=[];
+argsim.opts2.MaxIter=50;
+simulator=makesimulatorX(modell, argsim);
+v=find(modelcosts(:,find(strcmp(modelnames, modell)))>0);  [a,b]= sort(modelcosts(v, 2)); x2=parmat(b(2), :)
+
+
+for j=1:50
+try
+if j==1
+modelmatrix(j,:)=fminsearch(simulator, x2, argsim.opts2);
+else
+modelmatrix(j,:)=fminsearch(simulator,x1hybrid(j-1, :), argsim.opts2);
+end
+catch
+modelmatrix(j,:)=fminsearch(simulator, pars+randn(1, numel(argsim.mf.paramNames))*.1, argsim.opts2);
+end
+
+modelopt.(modell)=modelmatrix;
+save(strjoin('/Users/s1259407/Documents/MATLABGIT/', modell ,'.mat', ''),  'modelmatrix');
+end
+
+
+
+
 
