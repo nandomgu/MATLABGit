@@ -293,6 +293,7 @@ strains={...
 
 
 %color by concentration
+savedexpts=[];
 numreps=2
 concolors=[0 0.8 .8; 0 0 .8; 0.6 0 0.6 ];
 meandatamutants=struct;
@@ -351,7 +352,7 @@ colorchoice=cmap(sCon, :);
    localcons= concentrations(sCon); %concs of the experiments chosen
    whicharequery= localcons==plotcons(j); %which expts belong to the concentration in place
    conlist=exptchoice(whicharequery);
-   colorlist=colorchoice(whicharequery,:)
+   colorlist=colorchoice(whicharequery,:);
    
         mat=[]; %will hold the means for this condition's reps
         submat=[]; %will hold the means minus the wildtype
@@ -394,8 +395,8 @@ colorchoice=cmap(sCon, :);
                  
                  [h, means, times, stdmch, bnds]=multiMeanPlotRobustStdAdvanced([], cExperiment, [], 'wt', [], refrange, chan, 3, {strn, 'hxt4'}, false, 200);
              if ~isempty(regexp(exptList{k},  '20180615_2'))
-                  cExperiment.dirs=strrep(cExperiment.dirs, 'mig1ko', 'mig1g')
-                 cExperiment.dirs=strrep(cExperiment.dirs, 'mth1ko', 'mig1ko')
+                  cExperiment.dirs=strrep(cExperiment.dirs, 'mig1ko', 'mig1g');
+                 cExperiment.dirs=strrep(cExperiment.dirs, 'mth1ko', 'mig1ko');
                  [h, means, times, stdmch, bnds]=multiMeanPlotRobustStdAdvanced([], cExperiment, [], 'wt', 'mig1g', refrange, chan, 3, {strn, 'hxt4'}, false, 200);
              end
              else
@@ -539,7 +540,7 @@ end
 
 
 end
-savejson('',celldatamutants,'/Users/s1259407/Dropbox/PhD/phd_peter_swain/R/stepsdata.json');
+%savejson('',celldatamutants,'/Users/s1259407/Dropbox/PhD/phd_peter_swain/R/mutantsdata.json');
 
 %savejson('',locdata,'/Users/s1259407/Dropbox/PhD/phd_peter_swain/R/mig1stepsdata.json');
 %save('201807_mig1steps.mat', 'locdata')

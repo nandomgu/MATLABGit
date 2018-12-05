@@ -1,11 +1,20 @@
+function plotall(plotargs)
+%plotting mechanistic simulations for all mutants and concentrations
+yall= plotargs.y.(plotargs.modelname);
+concolors=plotargs.concolors;
+t=plotargs.t;
+input=plotargs.input;
+if ~isfield(plotargs, 'lw')
+    lw=1.5;
+else
+    lw=plotargs.lw;
+end
 
-figure; axes(); k=1; plot(real(y(:, k:(k+2))), 'color', concolors);  axes(); k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2))));k=k+3;axes(); plot(real(y(:, k:(k+2)))); stackPlots(gcf)
-
-figure; axes(); k=1; plot(real(argsim.datameans(:, k:(k+2))));  axes(); k=k+3; plot(real(argsim.datameans(:, k:(k+2)))); axes();k=k+3; plot(real(argsim.datameans(:, k:(k+2)))); axes();k=k+3; plot(real(argsim.datameans(:, k:(k+2)))); axes();k=k+3; plot(real(argsim.datameans(:, k:(k+2))));k=k+3;axes(); plot(real(argsim.datameans(:, k:(k+2)))); stackPlots(gcf)
 %%
+strs={'WT', 'Mig1?', 'Mth1?','std1?','rgt2?','snf3'};
 figure;
 k=1;
-lw=1.5
+c=1;
 while k<18
 axes(); 
 j=0; 
@@ -17,9 +26,12 @@ hold on;
 j=j+1
 plot(t,real(yall(:, k+j)), 'color', concolors(j+1,:), 'LineWidth', lw);
 hold on;
+title([plotargs.modelname ' ' strs{c}])
 k=k+3;
+c=c+1;
 end
 stackPlots(gcf)
+
 
         disp('plotting sugar')
         allaxes=get(gcf, 'children')
@@ -27,14 +39,15 @@ stackPlots(gcf)
       
             axes(allaxes(j))
             yyaxis right
-        area( t, argsim.input, 'FaceAlpha', 0.1, 'FaceColor', [1, .6, 0], 'EdgeColor', 'none'); 
+        area( t, input, 'FaceAlpha', 0.1, 'FaceColor', [1, .6, 0], 'EdgeColor', 'none'); 
+        ylim([0, 1])
         yyaxis left
         
         end
        
 
 %%
-axes(); k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2))));k=k+3;axes(); plot(real(y(:, k:(k+2)))); stackPlots(gcf)
+%axes(); k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2)))); axes();k=k+3; plot(real(y(:, k:(k+2))));k=k+3;axes(); plot(real(y(:, k:(k+2)))); stackPlots(gcf)
 
 
 
