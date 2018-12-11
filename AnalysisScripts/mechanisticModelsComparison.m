@@ -406,8 +406,188 @@ set(fhandle(3), 'YLim', [0,12])
 hideAllTicks(gcf, [1 4 5 6 2 3], 0, 1, 'right')
 
 
+%% vertical  panel
+plotargs.modelname='mechModelXS'
+argsim.theta=allthetas(61, :);
+simulator=makesimulatorX(plotargs.modelname, argsim);
+[a, plotargs.t, plotargs.y.(plotargs.modelname)]= simulator(parmat(1, :));
+
+plotall(plotargs)
+
+
+fhandle=get(gcf, 'children')
+xmar=0.02;
+ymar=0.05;
+interrowmar=.01;
+intercolmar=.02;
+%top left wt
+set(fhandle(1), 'Position', [0+xmar, .75+ymar, .5-intercolmar, .25-interrowmar])    
+%middle left snf3
+set(fhandle(6), 'Position', [0+xmar, .5+ ymar, .5-intercolmar, .25-interrowmar])    
+%top rgt2
+set(fhandle(5), 'Position', [.5+xmar, .75+ymar, .5-intercolmar, .25-interrowmar])    
+%middle right std1
+set(fhandle(4), 'Position', [.5+xmar, .5+ ymar, .5-intercolmar, .25-interrowmar])  
+%big left   mig1
+set(fhandle(2), 'Position', [0+xmar, 0+ ymar, .5-intercolmar, .5-interrowmar]) 
+set(fhandle(2), 'YLim', [0,1]) 
+%big right  mth1
+set(fhandle(3), 'Position', [.5+xmar, 0+ ymar, .5-intercolmar, .5-interrowmar]) 
+set(fhandle(3), 'YLim', [0,1]) 
+hideAllTicks(gcf, [1 4 5 6 2 3], 0, 1, 'right')
+
+
 %% 
-%% plotting the data figures. just needs a bit of shuffling
+
+%% horizontal plotting the data figures. just needs a bit of shuffling
+fhandle=get(gcf, 'children')
+
+        disp('plotting sugar')
+        allaxes=get(gcf, 'children')
+        for j=1:numel(allaxes)
+      
+            axes(allaxes(j))
+            yyaxis right
+        area( t(1:230), input, 'FaceAlpha', 0.1, 'FaceColor', [1, .6, 0], 'EdgeColor', 'none'); 
+        ylim([0, 1])
+        yyaxis left
+        
+        end
+       
+
+xmar=0.02;
+ymar=0.05;
+interrowmar=0.005;
+intercolmar=.02;
+%top left
+yyaxis(fhandle(6), 'left')
+pause(1)
+set(fhandle(6), 'Position', [0+xmar, .5+ymar, .25-intercolmar, .5-interrowmar])    
+set(fhandle(6), 'YLim', [0,4]) 
+yyaxis(fhandle(6), 'right')
+pause(1)
+ylim([0, 1])
+%bottom left
+set(fhandle(5), 'Position', [0+xmar, 0+ ymar, .25-intercolmar, .5-interrowmar])    
+yyaxis(fhandle(5), 'left')
+pause(1)
+set(fhandle(5), 'YLim', [0,4]) 
+yyaxis(fhandle(5), 'right')
+pause(1)
+ylim([0, 1])
+%top middle
+set(fhandle(4), 'Position', [.25+xmar, .5+ ymar, .25-intercolmar, .5-interrowmar])    
+yyaxis(fhandle(4), 'left')
+pause(1)
+set(fhandle(4), 'YLim', [0,4]) 
+yyaxis(fhandle(4), 'right')
+pause(1)
+ylim([0, 1])
+%bottom middle
+set(fhandle(3), 'Position', [.25+xmar, 0+ ymar, .25-intercolmar, .5-interrowmar])  
+yyaxis(fhandle(3), 'left')
+pause(1)
+set(fhandle(3), 'YLim', [0,4]) 
+yyaxis(fhandle(3), 'right')
+pause(1)
+ylim([0, 1])
+%big center
+set(fhandle(2), 'Position', [.50+xmar, 0+ ymar, .25-intercolmar, 1]) 
+yyaxis(fhandle(2), 'left')
+pause(1)
+set(fhandle(2), 'YLim', [0,12]) 
+yyaxis(fhandle(2), 'right')
+pause(1)
+ylim([0, 1])
+%big right
+set(fhandle(1), 'Position', [.75+xmar, 0+ ymar, .25-intercolmar, 1]) 
+yyaxis(fhandle(1), 'left')
+pause(1)
+set(fhandle(1), 'YLim', [0,12]) 
+yyaxis(fhandle(1), 'right')
+pause(1)
+ylim([0, 1])
+hideAllTicks(gcf, [1 4 5 6 2 3], 0, 1, 'right')
+
+
+%% vertical plotting the data figures. just needs a bit of shuffling
+%% this works with the figure imported from the data
+fhandle=get(gcf, 'children')
+
+        disp('plotting sugar')
+        allaxes=get(gcf, 'children')
+        for j=1:numel(allaxes)
+      
+            axes(allaxes(j))
+            yyaxis right
+        area( t(1:230), input, 'FaceAlpha', 0.1, 'FaceColor', [1, .6, 0], 'EdgeColor', 'none'); 
+        ylim([0, 1])
+        yyaxis left
+        
+        end
+       
+
+xmar=0.02;
+ymar=0.05;
+interrowmar=0.01;
+intercolmar=.005;
+%top left
+yyaxis(fhandle(1), 'left')
+pause(1)
+set(fhandle(1), 'Position', [0+xmar, .75+ymar, .5-intercolmar, .25-interrowmar])    
+set(fhandle(1), 'YLim', [0,4]) 
+yyaxis(fhandle(1), 'right')
+pause(1)
+ylim([0, 1])
+%bottom left
+set(fhandle(2), 'Position', [0+xmar, .5+ ymar, .5-intercolmar, .25-interrowmar])    
+yyaxis(fhandle(2), 'left')
+pause(1)
+set(fhandle(2), 'YLim', [0,4]) 
+yyaxis(fhandle(2), 'right')
+pause(1)
+ylim([0, 1])
+%top middle
+set(fhandle(3), 'Position', [.5+xmar, .75+ymar, .5-intercolmar, .25-interrowmar])    
+yyaxis(fhandle(3), 'left')
+pause(1)
+set(fhandle(3), 'YLim', [0,4]) 
+yyaxis(fhandle(3), 'right')
+pause(1)
+ylim([0, 1])
+%bottom middle
+set(fhandle(4), 'Position', [.5+xmar, .5+ ymar, .5-intercolmar, .25-interrowmar])  
+yyaxis(fhandle(4), 'left')
+pause(1)
+set(fhandle(4), 'YLim', [0,4]) 
+yyaxis(fhandle(4), 'right')
+pause(1)
+ylim([0, 1])
+%big center
+set(fhandle(5), 'Position',[0+xmar, 0+ ymar, .5-intercolmar, .5-interrowmar]) 
+yyaxis(fhandle(5), 'left')
+pause(1)
+set(fhandle(5), 'YLim', [0,12]) 
+yyaxis(fhandle(5), 'right')
+pause(1)
+ylim([0, 1])
+%big right
+set(fhandle(6), 'Position',  [.5+xmar, 0+ ymar, .5-intercolmar, .5-interrowmar]) 
+yyaxis(fhandle(6), 'left')
+pause(1)
+set(fhandle(6), 'YLim', [0,12]) 
+yyaxis(fhandle(6), 'right')
+pause(1)
+ylim([0, 1])
+hideAllTicks(gcf, [1 4 5 6 2 3], 0, 1, 'right')
+hideAllTicks(gcf, [1 2 3 4], 1, 0, 'left')
+hideAllTicks(gcf, [3 4 6], 0, 1, 'left')
+
+
+
+
+
+%% horizontal plotting the data figures. just needs a bit of shuffling
 fhandle=get(gcf, 'children')
 
         disp('plotting sugar')
@@ -540,30 +720,33 @@ end
 
 
 besttheta= [41:48 57:64];
-for k=13:16
+for k=14:16
 current_theta=allthetas(besttheta(k), :)
 %thetascores.(strjoin({'theta' , num2str(besttheta(k))}, '')).fval=[];
-thetafval=[];
+%thetafval=[];
 modell='mechModelXS';
 %fval=[];
 %modelopt=struct;
-thetamatrix=[];
+%thetamatrix=[];
 argsim.theta=current_theta;
 argsim.opts2.MaxIter=100;
 simulator=makesimulatorX(modell, argsim);
+load(['/Users/s1259407/Documents/MATLABGIT/thetamatrix_' num2str(besttheta(k)) '.mat']);
 
+thetamatrix(:, 38)= thetamatrix(:, 32);
+thetamatrix(:, 39)= thetamatrix(:, 33);
 x2=parmat(1, :);
 
 %model x6 stopped at iteration 64
-for j=1:10
+for j=11:30
 try
 if j==1
 [thetamatrix(j,:), thetafval(j)]=fminsearch(simulator, x2, argsim.opts2);
 else
-[thetamatrix(j,:), thetafval(j)]=fminsearch(simulator,modelmatrix(j-1, :), argsim.opts2);
+[thetamatrix(j,:), thetafval(j)]=fminsearch(simulator,thetamatrix(j-1, :), argsim.opts2);
 end
 catch
-[thetamatrix(j,:),thetafval(j)]=fminsearch(simulator, pars+randn(1, numel(argsim.mf.paramNames))*.1, argsim.opts2);
+[thetamatrix(j,:),thetafval(j)]=fminsearch(simulator, x2+randn(1, numel(argsim.mf.paramNames))*.1, argsim.opts2);
 end
 
 %%%%%%CHANGE TO YOUR USERNAME BELOW
@@ -573,6 +756,17 @@ end
 end
 
 %%
+
+
+names= {'thetamatrix_61.mat','thetamatrix_62.mat','thetamatrix_63.mat','thetamatrix_64.mat'};
+figure; 
+for n=1:numel(names)
+    
+    load(names{n})
+    plot(thetafval); hold on
+end
+
+
 
 
 

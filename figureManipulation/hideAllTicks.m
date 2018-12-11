@@ -1,7 +1,10 @@
 
-function hideAllTicks(fig, axnum, x, y, side)
+function hideAllTicks(fig, axnum, x, y, side, labels)
 %ticks
 %ticks=struct;
+if nargin<6 || isempty(labels)
+    labels=1;
+end
 
 if nargin<1 ||isempty(fig)
     fig=gcf;
@@ -29,18 +32,39 @@ end
  for j=axnum
      yyaxis(a(j), side);
      if x
+         
+         if labels==0
      nr= get(a(j), 'XAxis');
      set(nr, 'Visible', 'off')
-     end
+         end
+     
+                  else
+     a(j).XTickLabel='';
+         
+     
+      end
+         
      if y
+         
+         if labels==0
      nr= get(a(j), 'YAxis');
-     for b=1:numel(nr)
-     end    
-         set(nr(b), 'Visible', 'off');
-     end
- end
+     
+     
+     
+         if strcmp(side,'right')
+         set(nr(2), 'Visible', 'off');
+         else
+         set(nr(1), 'Visible', 'off');
+         end
+         else
+     a(j).YTickLabel='';
+         
+     
+      end
  deselectAxes(gcf);
-end
+     end
+         
+ end
  
  
  

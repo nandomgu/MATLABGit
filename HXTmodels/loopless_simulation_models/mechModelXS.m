@@ -93,6 +93,16 @@ hillrepM2MT=params(34);
 VinactGM2=params(35);
 KinactGM2=params(36);
 hillinactGM2=params(37);
+try
+KrepMGMT=params(38);
+hillrepMGMT=params(39);
+catch
+    
+  KrepMGMT=params(32);
+hillrepMGMT=params(33);  
+end
+
+
 
 function [DHXT, DMTH1, DMIG1, DSTD1, DMIG2] =system(Glucose, MTH1, MIG1, STD1, MIG2, HXT) 
 cytMIG1=1-MIG1;
