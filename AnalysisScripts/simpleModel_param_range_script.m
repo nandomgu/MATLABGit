@@ -563,7 +563,7 @@ nanmean(meandatamutants.hxt4.gp4percent); ...
 nanmean(meandatamutants.hxt4.g1percent); ...
 nanmean(meandatamutants.mig1ko.gp2percent); ...
 nanmean(meandatamutants.mig1ko.gp4percent); ...
-nanmean(celldatamutants.mig1ko.g1percent.rep1);...
+nanmean(meandatamutants.mig1ko.g1percent);...
 
 nanmean(celldatamutants.mth1ko.gp2percent.rep2);...
 nanmean(meandatamutants.mth1ko.gp4percent);...
@@ -583,8 +583,130 @@ nanmean(meandatamutants.snf3ko.g1percent)...
 ]'      
  allfitmeans=allfitmeans(1:230, :);
 
+ 
+  allfitstd=[nanstd(meandatamutants.hxt4.gp2percent); ...
+nanstd(meandatamutants.hxt4.gp4percent); ...
+nanstd(meandatamutants.hxt4.g1percent); ...
+nanstd(meandatamutants.mig1ko.gp2percent); ...
+nanstd(meandatamutants.mig1ko.gp4percent); ...
+nanstd(meandatamutants.mig1ko.g1percent);...
 
-%% less extreme mth1 dynamics. simulates nicely
+nanstd(celldatamutants.mth1ko.gp2percent.rep2);...
+nanstd(meandatamutants.mth1ko.gp4percent);...
+nanstd(celldatamutants.mth1ko.g1percent.rep2);...
+
+nanstd(meandatamutants.std1ko.gp2percent);...
+nanstd(meandatamutants.std1ko.gp4percent);...
+nanstd(meandatamutants.std1ko.g1percent);...
+
+nanstd(meandatamutants.rgt2ko.gp2percent);...
+nanstd(meandatamutants.rgt2ko.gp4percent);...
+nanstd(meandatamutants.rgt2ko.g1percent)...
+
+nanstd(meandatamutants.snf3ko.gp2percent);...
+nanstd(meandatamutants.snf3ko.gp4percent);...
+nanstd(meandatamutants.snf3ko.g1percent)...
+]'      
+ allfitstd=allfitstd(1:230, :); 
+ 
+%% curated data removing bad technical outliers
+ allfitmeanscurated=[nanmean(meandatamutants.hxt4.gp2percent); ...%1
+nanmean(meandatamutants.hxt4.gp4percent([1 3:end], :)); ...%2
+nanmean(meandatamutants.hxt4.g1percent); ...%3
+nanmean(meandatamutants.mig1ko.gp2percent); ...%4
+nanmean(meandatamutants.mig1ko.gp4percent); ...%5
+nanmean(meandatamutants.mig1ko.g1percent);...%6
+
+nanmean(celldatamutants.mth1ko.gp2percent.rep2);...%7
+nanmean(meandatamutants.mth1ko.gp4percent);...%8
+nanmean(celldatamutants.mth1ko.g1percent.rep2);...%9
+
+nanmean(meandatamutants.std1ko.gp2percent);...%10
+nanmean(meandatamutants.std1ko.gp4percent);...%11 one replicate screwed up
+nanmean(meandatamutants.std1ko.g1percent);...%12
+
+nanmean(meandatamutants.rgt2ko.gp2percent);...%13
+nanmean(meandatamutants.rgt2ko.gp4percent);...%14
+nanmean(meandatamutants.rgt2ko.g1percent)...%15
+
+nanmean(meandatamutants.snf3ko.gp2percent);...%16
+nanmean(meandatamutants.snf3ko.gp4percent.rep2);...%17 rep 1 screwed up. usng all cells from rep 2
+nanmean(meandatamutants.snf3ko.g1percent)...%18
+]'      
+ allfitmeanscurated=allfitmeanscurated(1:230, :);
+   
+ 
+
+  allfitstdcurated=[nanstd(meandatamutants.hxt4.gp2percent); ...%1
+nanstd(meandatamutants.hxt4.gp4percent([1 3:end], :)); ...%2
+nanstd(meandatamutants.hxt4.g1percent); ...%3
+nanstd(meandatamutants.mig1ko.gp2percent); ...%4
+nanstd(meandatamutants.mig1ko.gp4percent); ...%5
+nanstd(meandatamutants.mig1ko.g1percent);...%6
+
+nanstd(celldatamutants.mth1ko.gp2percent.rep2);...%7
+nanstd(meandatamutants.mth1ko.gp4percent);...%8
+nanstd(celldatamutants.mth1ko.g1percent.rep2);...%9
+
+nanstd(meandatamutants.std1ko.gp2percent);...%10
+nanstd(meandatamutants.std1ko.gp4percent);...%11 one replicate screwed up
+nanstd(meandatamutants.std1ko.g1percent);...%12
+
+nanstd(meandatamutants.rgt2ko.gp2percent);...%13
+nanstd(meandatamutants.rgt2ko.gp4percent);...%14
+nanstd(meandatamutants.rgt2ko.g1percent)...%15
+
+nanstd(meandatamutants.snf3ko.gp2percent);...%16
+nanstd(meandatamutants.snf3ko.gp4percent);...%17 rep 1 screwed up. usng all cells from rep 2
+nanstd(meandatamutants.snf3ko.g1percent)...%18
+]'      
+ allfitstdcurated=allfitstdcurated(1:230, :);
+   
+ 
+ 
+ %% plotting all means and stds
+ figure;
+ j=1;
+ while(j<19)
+ axes()
+ errorbar(allfitmeans(:, j), allfitstd(:, j))
+ hold on
+ j=j+1;
+ errorbar(allfitmeans(:, j), allfitstd(:, j))
+ hold on
+ j=j+1;
+ errorbar(allfitmeans(:, j), allfitstd(:, j))
+ j=j+1;
+ end
+ 
+ stackPlots(gcf)
+ 
+ 
+%% plotting all curated means and stds
+ figure;
+ j=1;
+ while(j<19)
+ axes()
+ errorbar(allfitmeanscurated(:, j), allfitstdcurated(:, j))
+ hold on
+ j=j+1;
+ errorbar(allfitmeanscurated(:, j), allfitstdcurated(:, j))
+ hold on
+ j=j+1;
+ errorbar(allfitmeanscurated(:, j), allfitstdcurated(:, j))
+ j=j+1;
+ end
+ 
+ stackPlots(gcf)
+
+ 
+ %% assigning this to argsim
+ 
+ argsim.datameans=allfitmeans;
+ argsim.datastd=allfitstd
+ 
+ 
+ %% less extreme mth1 dynamics. simulates nicely
 %more elegant parameter exploration
 %%the order does not matter
 

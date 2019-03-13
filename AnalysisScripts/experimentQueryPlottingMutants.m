@@ -146,8 +146,10 @@ currentfolders={
     '20180529_results',0.4;...
     %'20180530_results',0.4;... %experiment  is of very poor quality in
     %many ways.
-    '20180531_results', 0.4;...
-    '20180601_results', 0.4;...
+    %'20180531_results', 0.4;... %excluding experiment because the
+    %downshift occurs earlier
+    '20180904_results_extended', 0.4;
+    '20180601_results', 0.4;
     %'20180604_results', 0.4; experiment says 0.4% but it behaves quite
     %similarly to  0.2% glucose. No other replicate behaves lite this.
     %probably a mistake int the medium.
@@ -294,7 +296,7 @@ strains={...
 
 %color by concentration
 savedexpts=[];
-numreps=2
+numreps=4
 concolors=[0 0.8 .8; 0 0 .8; 0.6 0 0.6 ];
 meandatamutants=struct;
 subtractiondatamutants=struct;
@@ -411,7 +413,7 @@ colorchoice=cmap(sCon, :);
 %         try
         newy= interp1(times, means(1, :), ntimes, 'pchip',nan); %interpolating times to sample at the same point throughout.
 %         catch
-%             continue
+%             continuemean
 %         end
         
         mat(l,:)=newy;
@@ -428,6 +430,7 @@ colorchoice=cmap(sCon, :);
         disp('storing the interpolated cell data for the first 2 reps  only');
         if l<=numreps
         celldatamutants.(strn).(nam).(['rep' num2str(l)])= F(qgrid)';
+        cy5tree.(strains{q}).(nam).(['rep' num2str(l)])=cy5(sCon, :);
         end
         
         disp('making SEM bounds of the interpolated values')

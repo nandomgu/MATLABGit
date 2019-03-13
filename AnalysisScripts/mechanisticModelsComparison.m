@@ -407,10 +407,14 @@ hideAllTicks(gcf, [1 4 5 6 2 3], 0, 1, 'right')
 
 
 %% vertical  panel
+simnums=[41, 42, 43, 44, 45, 46, 48, 57:64];
+for n=simnums
 plotargs.modelname='mechModelXS'
-argsim.theta=allthetas(61, :);
-simulator=makesimulatorX(plotargs.modelname, argsim);
-[a, plotargs.t, plotargs.y.(plotargs.modelname)]= simulator(parmat(1, :));
+argsim.theta=allthetas(n, :);
+load(['thetamatrix_' num2str(n) '.mat' ] )
+pause(.5)
+simulator=makesimulatorX(plotargs.modelname, argsim);      %parmat(1,:) is probably x1hybrid
+[a, plotargs.t, plotargs.y.(plotargs.modelname)]= simulator(thetamatrix(end, :));
 
 plotall(plotargs)
 
@@ -436,7 +440,7 @@ set(fhandle(3), 'Position', [.5+xmar, 0+ ymar, .5-intercolmar, .5-interrowmar])
 set(fhandle(3), 'YLim', [0,1]) 
 hideAllTicks(gcf, [1 4 5 6 2 3], 0, 1, 'right')
 
-
+end
 %% 
 
 %% horizontal plotting the data figures. just needs a bit of shuffling
@@ -720,7 +724,7 @@ end
 
 
 besttheta= [41:48 57:64];
-for k=14:16
+for k=13
 current_theta=allthetas(besttheta(k), :)
 %thetascores.(strjoin({'theta' , num2str(besttheta(k))}, '')).fval=[];
 %thetafval=[];
@@ -738,7 +742,16 @@ thetamatrix(:, 39)= thetamatrix(:, 33);
 x2=parmat(1, :);
 
 %model x6 stopped at iteration 64
-for j=11:30
+if k==13
+    q=3;
+    fin=20;
+
+else
+    q=11;
+    fin=30;
+end
+
+for j=q:fin
 try
 if j==1
 [thetamatrix(j,:), thetafval(j)]=fminsearch(simulator, x2, argsim.opts2);
@@ -755,6 +768,137 @@ end
 
 end
 
+
+
+
+
+  allfitmeans=[nanmean(meandatamutants.hxt4.gp2percent); ...
+nanmean(meandatamutants.hxt4.gp4percent); ...
+nanmean(meandatamutants.hxt4.g1percent); ...
+nanmean(meandatamutants.mig1ko.gp2percent); ...
+nanmean(meandatamutants.mig1ko.gp4percent); ...
+nanmean(celldatamutants.mig1ko.g1percent.rep1);...
+
+nanmean(celldatamutants.mth1ko.gp2percent.rep2);...
+nanmean(meandatamutants.mth1ko.gp4percent);...
+nanmean(celldatamutants.mth1ko.g1percent.rep2);...
+
+nanmean(meandatamutants.std1ko.gp2percent);...
+nanmean(celldatamutants.std1ko.gp4percent.rep2);...
+nanmean(meandatamutants.std1ko.g1percent);...
+
+nanmean(meandatamutants.rgt2ko.gp2percent);...
+nanmean(meandatamutants.rgt2ko.gp4percent);...
+nanmean(meandatamutants.rgt2ko.g1percent)...
+
+nanmean(meandatamutants.snf3ko.gp2percent);...
+nanmean(meandatamutants.snf3ko.gp4percent);...
+nanmean(meandatamutants.snf3ko.g1percent)...
+]'      
+ allfitmeans=allfitmeans(1:230, :);
+
+ 
+  allfitstd=[nanstd(meandatamutants.hxt4.gp2percent); ...
+nanstd(meandatamutants.hxt4.gp4percent); ...
+nanstd(meandatamutants.hxt4.g1percent); ...
+nanstd(meandatamutants.mig1ko.gp2percent); ...
+nanstd(meandatamutants.mig1ko.gp4percent); ...
+nanstd(celldatamutants.mig1ko.g1percent.rep1);...
+
+nanstd(celldatamutants.mth1ko.gp2percent.rep2);...
+nanstd(meandatamutants.mth1ko.gp4percent);...
+nanstd(celldatamutants.mth1ko.g1percent.rep2);...
+
+nanstd(meandatamutants.std1ko.gp2percent);...
+nanstd(celldatamutants.std1ko.gp4percent.rep2);...
+nanstd(meandatamutants.std1ko.g1percent);...
+
+nanstd(meandatamutants.rgt2ko.gp2percent);...
+nanstd(meandatamutants.rgt2ko.gp4percent);...
+nanstd(meandatamutants.rgt2ko.g1percent)...
+
+nanstd(meandatamutants.snf3ko.gp2percent);...
+nanstd(meandatamutants.snf3ko.gp4percent);...
+nanstd(meandatamutants.snf3ko.g1percent)...
+]'      
+ allfitstd=allfitstd(1:230, :); 
+ 
+%% curated data removing bad technical outliers
+ allfitmeanscurated=[nanmean(meandatamutants.hxt4.gp2percent); ...%1
+nanmean(meandatamutants.hxt4.gp4percent([1 3:end], :)); ...%2
+nanmean(meandatamutants.hxt4.g1percent); ...%3
+nanmean(meandatamutants.mig1ko.gp2percent); ...%4
+nanmean(meandatamutants.mig1ko.gp4percent); ...%5
+nanmean(meandatamutants.mig1ko.g1percent);...%6
+
+nanmean(celldatamutants.mth1ko.gp2percent.rep2);...%7
+nanmean(meandatamutants.mth1ko.gp4percent);...%8
+nanmean(celldatamutants.mth1ko.g1percent.rep2);...%9
+
+nanmean(meandatamutants.std1ko.gp2percent);...%10
+nanmean(celldatamutants.std1ko.gp4percent.rep2);...%11 one replicate screwed up
+nanmean(meandatamutants.std1ko.g1percent);...%12
+
+nanmean(meandatamutants.rgt2ko.gp2percent);...%13
+nanmean(meandatamutants.rgt2ko.gp4percent);...%14
+nanmean(meandatamutants.rgt2ko.g1percent)...%15
+
+nanmean(meandatamutants.snf3ko.gp2percent);...%16
+nanmean(celldatamutants.snf3ko.gp4percent.rep2);...%17 rep 1 screwed up. usng all cells from rep 2
+nanmean(meandatamutants.snf3ko.g1percent)...%18
+]'      
+ allfitmeanscurated=allfitmeanscurated(1:230, :);
+   
+ 
+
+  allfitstdcurated=[nanstd(meandatamutants.hxt4.gp2percent); ...%1
+nanstd(meandatamutants.hxt4.gp4percent([1 3:end], :)); ...%2
+nanstd(meandatamutants.hxt4.g1percent); ...%3
+nanstd(meandatamutants.mig1ko.gp2percent); ...%4
+nanstd(meandatamutants.mig1ko.gp4percent); ...%5
+nanstd(meandatamutants.mig1ko.g1percent);...%6
+
+nanstd(celldatamutants.mth1ko.gp2percent.rep2);...%7
+nanstd(meandatamutants.mth1ko.gp4percent);...%8
+nanstd(celldatamutants.mth1ko.g1percent.rep2);...%9
+
+nanstd(meandatamutants.std1ko.gp2percent);...%10
+nanstd(celldatamutants.std1ko.gp4percent.rep2);...%11 one replicate screwed up
+nanstd(meandatamutants.std1ko.g1percent);...%12
+
+nanstd(meandatamutants.rgt2ko.gp2percent);...%13
+nanstd(meandatamutants.rgt2ko.gp4percent);...%14
+nanstd(meandatamutants.rgt2ko.g1percent)...%15
+
+nanstd(meandatamutants.snf3ko.gp2percent);...%16
+nanstd(celldatamutants.snf3ko.gp4percent.rep2);...%17 rep 1 screwed up. usng all cells from rep 2
+nanstd(meandatamutants.snf3ko.g1percent)...%18
+]'      
+ allfitstdcurated=allfitstdcurated(1:230, :);
+   
+ 
+ 
+ 
+ 
+ 
+ 
+%% plotting all curated means and stds
+ figure;
+ j=1;
+ while(j<19)
+ axes()
+ errorbar(allfitmeanscurated(:, j), allfitstdcurated(:, j))
+ hold on
+ j=j+1;
+ errorbar(allfitmeanscurated(:, j), allfitstdcurated(:, j))
+ hold on
+ j=j+1;
+ errorbar(allfitmeanscurated(:, j), allfitstdcurated(:, j))
+ j=j+1;
+ end
+
+
+
 %%
 
 
@@ -766,8 +910,15 @@ for n=1:numel(names)
     plot(thetafval); hold on
 end
 
-
-
+simnums=[41, 42, 43, 44, 45, 46, 48, 57:64];
+figure; 
+for n=1:numel(simnums)
+    
+    load(['thetamatrix_' num2str(simnums(n)) '.mat' ] )
+    plot(thetafval, 'DisplayName', ['thetamatrix ' num2str(simnums(n)) ':' num2str(allthetas(simnums(n), :)) ], 'LineWidth', randn(1)+2); hold on
+end
+xlabel('Fminsearch progress (1= 100 iterations)')
+ylabel('Model cost')
 
 
 

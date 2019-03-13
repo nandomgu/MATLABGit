@@ -195,14 +195,18 @@ disp('loading experiment')
 cExperiment=l1.cExperiment
 mch=makeMultiChamber(cExperiment)
 bgchan=3;
+
 %if size(cExperiment.cellInf(bgchan).mean,2)>= 250
 
     cy5(n, :)= topUp(normalizeTS(nonzeroColMean(cExperiment.cellInf(bgchan).mean)), 250);
-
-    hillfactor=10; 
-    hill = @(input)   input^hillfactor/(thresh^hillfactor+ input^hillfactor); 
+    %times=  (0: numel(cy5(n, :)))*5/60;
+    hillfactor=6; 
+    thresh=0.4
+    hill = @(input)   (input^hillfactor)/(thresh^hillfactor+ input^hillfactor); 
     %figure; plot(arrayfun(hill, glucose))
     tmpinput=arrayfun(hill, cy5(n, :));
+    figure; plot(cy5(n, :))
+    hold on; plot(tmpinput)
     fprintf(fopen([currentfolders{n, 1} '_input.txt'], 'w'),'%3.3f , %3.3f\n', [times(1:230)',  tmpinput(1:230)']')
 
     

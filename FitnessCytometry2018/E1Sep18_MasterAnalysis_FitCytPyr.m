@@ -161,19 +161,19 @@ for thisMutant = 1:length(mutants)%-3
         wells = Muts.(str2mat(mutants(thisMutant)));
         refs = Muts.Refs;
         
-        h(m-1,:)=JitterPlot(m-1.2, Media(m).robfit(2,wells), jitter, 'o',mapacolor(jump*m-1,:) );
+        h(m-1,:)=JitterPlot(m-1.2, Media(m).robfit(2,wells), jitter, 'o', concmap(m-1, :));%mapacolor(jump*m-1,:) );
         thismutmeans(m-1)= nanmean(Media(m).robfit(2,wells));
         refmeans(m-1)=nanmean(Media(m).robfit(2,refs));
         fitnessmns.(mutants{thisMutant})=thismutmeans;
         %h(m-1)=plot( ones(1,length(wells))*m-1.2, Media(m).robfit(2,wells), '.','color', mapacolor(jump*m-1,:) );
-        plot( ones(1,length(refs))*m-.8, Media(m).robfit(2,refs), '.','color',mapacolor(jump*m-1,:) )
+        plot( ones(1,length(refs))*m-.8, Media(m).robfit(2,refs), '.','color', concmap(m-1, :));%mapacolor(jump*m-1,:) );mapacolor(jump*m-1,:) )
         title( mutants(thisMutant) )
         MediaNames(m-1)=Media(m).name;
         
          normalFitness(thisMutant,m) = median(  Media(m).robfit(2,wells)-median(Media(m).robfit(2,refs)) );
        
     end
-        ylim( [-.2 .2] )
+        ylim( [-.3, .3] )
     xlim([0 m])
 end
 legend(h(:,1),MediaNames,'location','EastOutside')
@@ -199,11 +199,12 @@ for thisMutant = orderMutants% 1:length(mutants)-3%
         hold on
         wells = Muts.(str2mat(mutants(thisMutant)));
         refs = Muts.Refs;
-        
-        h(m-1,:)=JitterPlot(m-1.15, Media(m).robfit(2,wells)-median(Media(m).robfit(2,refs)), jitter, 'o',mapacolor(jump*m-1,:) );
+                                                        %media subtraction
+                                                        %-median(Media(m).robfit(2,refs))
+        h(m-1,:)=JitterPlot(m-1.15, Media(m).robfit(2,wells), jitter, 'o',mapacolor(jump*m-1,:) );
         %JitterPlot( m-.8, Media(m).robfit(2,refs)-median(Media(m).robfit(2,refs)), jitter, '.', [.5 .5 .5])
         %plot( ones(1,length(refs))*(m-.8), Media(m).robfit(2,refs)-median(Media(m).robfit(2,refs)), 'o', 'color',[.5 .5 .5],'markersize',5)
-        JitterPlot(m-.8, Media(m).robfit(2,refs)-median(Media(m).robfit(2,refs)), jitter-.1, '.',mapacolor(jump*m-1,:) );
+        JitterPlot(m-.8, Media(m).robfit(2,refs), jitter-.1, '.',mapacolor(jump*m-1,:) );
         MedianNormFitness(thisMutant,m) = median(  Media(m).robfit(2,wells)-median(Media(m).robfit(2,refs)) );
         
         [ttestsH(thisMutant,m) ttestsP(thisMutant,m)] = ttest2( Media(m).robfit(2,refs)-median(Media(m).robfit(2,refs)),  Media(m).robfit(2,wells)-median(Media(m).robfit(2,refs)) );
@@ -239,17 +240,22 @@ clustergram(SignificantMNF(orderMutants,2:end),'RowLabels',mutants(orderMutants)
 
 
 %%
-figure; qq=bar(normalFitness(:, [ 1 :9]));
-for j=2:9
-    sucs= [0 1 .5  .25 0];
+figure; qq=bar(normalFitness(:, [ 2 :11]));
+concmap=[]
+for j=2:11
+    sucs= [ 1 .6 .3 0];
     %glucs= [0  0 0 0 0  0 .2 .4 .6 .8 1];
-    glucs= [0  0 0 0 0  .4  .6 .8 1]; %when 
+    glucs= [0  0 0 0 .1  .2  .3  .4 .5 .6]+.35; %when 
     if j<=5
-set(qq(j), 'FaceColor', [0 1-sucs(j)  sucs(j)]);
+set(qq(j-1), 'FaceColor', [0 1-sucs(j-1)  .5]);
+concmap(j-1, :)=  [0 1-sucs(j-1)  sucs(j-1)];
     else
-set(qq(j), 'FaceColor', [glucs(j) 0  glucs(j)]);
+set(qq(j-1), 'FaceColor', [glucs(j-1) 0  glucs(j-1)]);
+concmap(j-1, :)=  [glucs(j-1) 0  glucs(j-1)];
     end
 end
+concmap(10, :)= [1 0 0]
+set(qq(10), 'FaceColor', concmap(10, :));
 
 for q=1:numel(mutants)
     text(q-.2, .3, mutants{q})

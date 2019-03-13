@@ -4,9 +4,10 @@ input=params.input;
 data=params.data;
 lsq=params.lsq;
 mig1=params.mig1;
+options=params.opts;
 %data is a m replicate x n timepoint matrix
 %% run specific params
-modelFeatures=extractModelFeatures(modelName);
+%modelFeatures=extractModelFeatures(modelName);
 times= linspace(0,20, 250);
 times=times(1:numel(input));
 params.times= times;
@@ -24,7 +25,7 @@ function [lsqdiff, tf,yf,d]=rampSim(pars)
 pars=exp(pars);
 d=nanmean(data)';
 sim=func(pars,params);
-[tf, yf]=ode23(sim, times,d(1) , modelFeatures.options);
+[tf, yf]=ode23(sim, times,d(1) , options);
 
 
 d=d(1:numel(times));

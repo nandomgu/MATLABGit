@@ -1,7 +1,15 @@
 
 function modelh= mechModelXS(params, args)
 
-description=['mechModel10 switch. This allows activation and deactivation of specific branches based on field theta=[0 1 0...]'
+%Mechanistic model. This function
+%-receives the parameters (params) and other inputs for simulation (args)
+%-simulates the equations for the glucose system in 3 concentrations and
+%5 genotypes. (wt, mth1, mig1, snf3, rgt2, std1)
+%outputs the simulation functions 
+
+
+%params is an array of parameters in order.
+description=['mechModel10 ''switch'' version. This allows activation and deactivation of specific branches based on field theta=[0 1 0...]'
              ];
              
              
@@ -15,11 +23,10 @@ function dout=transcriptModelh(t, x)
 
 %mediaInput=smooth(mediaInput);
 Glucose1=interp1(times, mediaInput,t);
-% if isfield(params, 'mutant') && ~isempty(params.mutant)  && params.mutant~=0 %if we'd like the simulation to have a mutant
-%     
-%     x(params.mutant)=0;
-% end
-regulators=[];
+
+%for every genotype there are 5 species x 3 gluc levels. the regulators matrix
+%outputs are the transporter (HXT)  in all the conditions. 
+
 HXT_2= x(1);
 HXT_4= x(2);
 HXT_1= x(3);
@@ -39,13 +46,13 @@ HXTSNF3_2=x(16);
 HXTSNF3_4=x(17);
 HXTSNF3_1=x(18);
 
-j=19;
-k=1;
-while j< (18*4)
-regulators(j: j+3)=[x(j) x(j+2) x(j+2) x(j+3)];
-j=j+5;
-
-end
+% j=19;
+% k=1;
+% while j< (18*4)
+% regulators(j: j+3)=[x(j) x(j+2) x(j+2) x(j+3)];
+% j=j+5;
+% 
+% end
 %parameters left unused are in black.
 VHXT=params(1);
 Vloc=params(2);
@@ -103,13 +110,35 @@ hillrepMGMT=params(33);
 end
 
 
+%system is the system of equations for the wild type case. 
+%the sensor mutants are not explicitly species. they are represented in
+%parameter changes.
+%for example, in the snf3 mutant,  the glucose degradation threshold for
+%mth1 becomes really high, implying that you need the high sensor to
+%degrade it. In the Rgt2 case though, the degradation threshold for Std1 is now high, 
+%implying that it is generally very difficult to degrade it via snf3 alone. 
+
+%IMPLEMENTATION OF DIFFERENT MODELS
+%different models are implemented through conditional activation of
+%specific processes via theta functions that can be 0(inactive) or 1 (active)
+%the args structure must have field called theta,  which s an array of the
+%thetas of all the processes. so [0 0 0 0 0 0] inactivates all the
+%processes and [1 1 1 1 1 1] activates them all. 
+%the processes are:
+% theta(1)= mig2 represses mth1
+% theta(2)=mig1 represses mth1
+% theta(3)= std1 inhibits mig1
+% theta(4)= std1 inhibits mig2
+% theta(5)= mth1 represses std1
+% theta(6)= std1 represses HXT
+
 
 function [DHXT, DMTH1, DMIG1, DSTD1, DMIG2] =system(Glucose, MTH1, MIG1, STD1, MIG2, HXT) 
 cytMIG1=1-MIG1;
 degMT=maxdegMT*(Glucose)^hilldegMT /(KdegMT^hilldegMT+Glucose^hilldegMT);
 degST=maxdegST*(Glucose)^hilldegST /(KdegST^hilldegST+Glucose^hilldegST);
 deg=VdegHXT/(1+ (Glucose/threshdegHXT)^hilldegHXT)+basaldeg;
-DMTH1= 1/ (1 + (args.theta(1)*(MIG2/KrepM2MT)^hillrepM2MT)+ (args.theta(2)*(MIG1/KrepM2MT)^hillrepM2MT))  - (degMT+ basaldegMT)*MTH1 ;
+DMTH1= 1/ (1 + (args.theta(1)*(MIG2/KrepM2MT)^hillrepM2MT)+ (args.theta(2)*(MIG1/KrepMGMT)^hillrepMGMT))  - (degMT+ basaldegMT)*MTH1 ;
 DMIG1= Vloc*cytMIG1*(Glucose/KMG)^hillMG/(1 + (Glucose/KMG)^hillMG) -deloc*MIG1 -KinhSMG*STD1*MIG1*args.theta(3);
 DSTD1= 1/(1+(args.theta(5)*(MTH1/KrepMTST)^hillrepMTST)) - (degST+ basaldegST)*STD1 ;
 DMIG2= 1/(1+ (MTH1/KrepSTM2)^hillrepSTM2) -KinhSM2*STD1*MIG2*args.theta(4) -basaldegM2*MIG2   -  (VinactGM2 / (1 + (Glucose/KinactGM2)^hillinactGM2))*MIG2; 
@@ -117,13 +146,14 @@ DHXT=VHXT/ (1+ (MIG1/KrepHMG)^hillHMG +(MTH1/KrepHMT)^hillHMT +(MIG2/KrepHM2)^hi
 
 end
  
+%systemSNF3 represents the equations in the SNF3 case
 
 function [DHXT, DMTH1, DMIG1, DSTD1, DMIG2] =systemSNF3(Glucose, MTH1, MIG1, STD1, MIG2, HXT) 
 cytMIG1=1-MIG1;
 degMT=maxdegMT*(Glucose)^hilldegMT /(.4^hilldegMT+Glucose^hilldegMT);
 degST=maxdegST*(Glucose)^hilldegST /(KdegST^hilldegST+Glucose^hilldegST);
 deg=VdegHXT/(1+ (Glucose/threshdegHXT)^hilldegHXT)+basaldeg;
-DMTH1= 1/ (1 + (args.theta(1)*(MIG2/KrepM2MT)^hillrepM2MT)+ (args.theta(2)*(MIG1/KrepM2MT)^hillrepM2MT))  - (degMT+ basaldegMT)*MTH1 ;
+DMTH1= 1/ (1 + (args.theta(1)*(MIG2/KrepM2MT)^hillrepM2MT)+ (args.theta(2)*(MIG1/KrepMGMT)^hillrepMGMT))  - (degMT+ basaldegMT)*MTH1 ;
 DMIG1= Vloc*cytMIG1*(Glucose/KMG)^hillMG/(1 + (Glucose/KMG)^hillMG) -deloc*MIG1 -KinhSMG*STD1*MIG1*args.theta(3);
 DSTD1= 1/(1+(args.theta(5)*(MTH1/KrepMTST)^hillrepMTST)) - (degST+ basaldegST)*STD1 ;
 DMIG2= 1/(1+ (MTH1/KrepSTM2)^hillrepSTM2) -KinhSM2*STD1*MIG2*args.theta(4) -basaldegM2*MIG2   -  (VinactGM2 / (1 + (Glucose/KinactGM2)^hillinactGM2))*MIG2; 
@@ -137,7 +167,7 @@ cytMIG1=1-MIG1;
 degMT=maxdegMT*(Glucose)^hilldegMT /(KdegMT^hilldegMT+Glucose^hilldegMT);
 degST=maxdegST*(Glucose)^hilldegST /(10^hilldegST+Glucose^hilldegST);
 deg=VdegHXT/(1+ (Glucose/threshdegHXT)^hilldegHXT)+basaldeg;
-DMTH1= 1/ (1 + (args.theta(1)*(MIG2/KrepM2MT)^hillrepM2MT)+ (args.theta(2)*(MIG1/KrepM2MT)^hillrepM2MT))  - (degMT+ basaldegMT)*MTH1 ;
+DMTH1= 1/ (1 + (args.theta(1)*(MIG2/KrepM2MT)^hillrepM2MT)+ (args.theta(2)*(MIG1/KrepMGMT)^hillrepMGMT))  - (degMT+ basaldegMT)*MTH1 ;
 DMIG1= Vloc*cytMIG1*(Glucose/KMG)^hillMG/(1 + (Glucose/KMG)^hillMG) -deloc*MIG1 -KinhSMG*STD1*MIG1*args.theta(3);
 DSTD1= 1/(1+(args.theta(5)*(MTH1/KrepMTST)^hillrepMTST)) - (degST+ basaldegST)*STD1 ;
 DMIG2= 1/(1+ (MTH1/KrepSTM2)^hillrepSTM2) -KinhSM2*STD1*MIG2*args.theta(4) -basaldegM2*MIG2   -  (VinactGM2 / (1 + (Glucose/KinactGM2)^hillinactGM2))*MIG2; 
@@ -145,7 +175,7 @@ DHXT=VHXT/ (1+ (MIG1/KrepHMG)^hillHMG +(MTH1/KrepHMT)^hillHMT +(MIG2/KrepHM2)^hi
 
  
  end
-
+%keeping a tidy matrix with all the species simulated.
 dout=zeros((18+18*4), 1);
 Glucose=Glucose1*.2;
 
@@ -202,7 +232,7 @@ f=f+4;
 f=f+4;
 [DHXT_1,dout(f),dout(f+1),dout(f+2),dout(f+3)] =system(Glucose,x(f),x(f+1),x(f+2),x(f+3), HXT_1) ;
 
-
+%only outputing the first 18 variables simulatedfor the fits. 
 dout(1)=DHXT_2;
 dout(2)=DHXT_4;
 dout(3)=DHXT_1;

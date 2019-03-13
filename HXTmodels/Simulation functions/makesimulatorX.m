@@ -1,4 +1,4 @@
-function handle=makesimulatorX(modelName,params )
+function handle=makesimulatorX(modelName, params )
 %make makesimulator 3 is for mechanistic models, 
 %just as make simulator 2, but it allows to
 %do the fitting only on a subset of parameters while keeping
@@ -17,8 +17,8 @@ times= linspace(0,20, 250);
 times=times(1:numel(input));
 params.times= times;
 
+func=eval(['@' modelName ';']);
 
-func=eval(['@' modelName ';'])
 handle= @rampSim;
 if lsq
     outfun=@(y,d) sum((y-d).^2) ;
@@ -43,7 +43,7 @@ pars(params.onlyparams)=temppars(params.onlyparams);
 
 sim=func(pars,params);
 
-[tf, yf]=ode113(sim, times, params.initialconditions.*(params.initialconditions>0), modelFeatures.options);
+[tf, yf]=ode113(sim, times, params.initialconditions.*(params.initialconditions>0), params.opts);
 
 yf=real(yf);
 yout=yf(:, params.outvar);
