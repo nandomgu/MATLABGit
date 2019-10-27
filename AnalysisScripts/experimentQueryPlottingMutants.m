@@ -296,7 +296,7 @@ strains={...
 
 %color by concentration
 savedexpts=[];
-numreps=4
+numreps=7
 concolors=[0 0.8 .8; 0 0 .8; 0.6 0 0.6 ];
 meandatamutants=struct;
 subtractiondatamutants=struct;
@@ -408,13 +408,13 @@ colorchoice=cmap(sCon, :);
         end
         
         disp(['interpolating main data. strain ' strn 'media ' num2str(plotcons(j)), ' replicate ' num2str(k) ]);
-        ntimes=linspace(0, 20, 250); %new time vector
+        ntimes=linspace(0, 20, 450); %new time vector. was 250. trying 350 to resolve the discontinuities for the solver
         
-%         try
+         try
         newy= interp1(times, means(1, :), ntimes, 'pchip',nan); %interpolating times to sample at the same point throughout.
-%         catch
-%             continuemean
-%         end
+%          catch
+%              continuemean
+%          end
         
         mat(l,:)=newy;
         disp(['interpolating hxt4 for this replicate']);
@@ -430,6 +430,7 @@ colorchoice=cmap(sCon, :);
         disp('storing the interpolated cell data for the first 2 reps  only');
         if l<=numreps
         celldatamutants.(strn).(nam).(['rep' num2str(l)])= F(qgrid)';
+        stddatamutants.(strn).(nam).(['rep' num2str(l)])= nanstd(celldatamutants.(strn).(nam).(['rep' num2str(l)]))
         cy5tree.(strains{q}).(nam).(['rep' num2str(l)])=cy5(sCon, :);
         end
         
@@ -525,10 +526,18 @@ colorchoice=cmap(sCon, :);
     
     
    
-
+   end
     
    end
     disp('adding matrices')
+    stdmat=[]
+    nmss=fieldnames(stddatamutants.(strn).(nam))
+    for j =1:numel(nmss)
+    
+        stdmat(j, :)= stddatamutants.(strn).(nam).(nmss{j})
+    
+    end
+    stdmatrices.(strn).(nam)=stdmat;
     meandatamutants.(strn).(nam)=mat;
     allbnds.(strn).(nam)=bndsmat;
     subtractiondata.(strn).(nam)=submat; %data where the hxt4 mean trace is subtracted from the traces.
@@ -539,7 +548,8 @@ colorchoice=cmap(sCon, :);
 %     if strn=='mig1g'
 %     locdata.mig1g.g1percent.rep3.data= locdata.mig1g.g1percent.rep3.data(1:200,:)
 %    
-end
+   
+   end
 
 
 end
@@ -611,5 +621,77 @@ end
 end
 
 
+%% all mean data traces
+meandata=[
+nanmean(meandatamutants.hxt4.gp2percent);
+nanmean(meandatamutants.hxt4.gp4percent);
+nanmean(meandatamutants.hxt4.g1percent);
+nanmean(meandatamutants.mth1ko.gp2percent);
+nanmean(meandatamutants.mth1ko.gp4percent);
+nanmean(meandatamutants.mth1ko.g1percent);
+nanmean(meandatamutants.mig1ko.gp2percent);
+nanmean(meandatamutants.mig1ko.gp4percent);
+nanmean(meandatamutants.mig1ko.g1percent);
+nanmean(meandatamutants.std1ko.gp2percent);
+nanmean(meandatamutants.std1ko.gp4percent);
+nanmean(meandatamutants.std1ko.g1percent);
+nanmean(meandatamutants.rgt2ko.gp2percent);
+nanmean(meandatamutants.rgt2ko.gp4percent);
+nanmean(meandatamutants.rgt2ko.g1percent);
+nanmean(meandatamutants.snf3ko.gp2percent);
+nanmean(meandatamutants.snf3ko.gp4percent);
+nanmean(meandatamutants.snf3ko.g1percent);
+]
 
+savejson('', meandata, '/Users/s1259407/Dropbox/PhD/phd_peter_swain/data/plate_reader_data/PythonScripts/Mig1Model/json/allfitmeans.json')
+
+
+%% the mean of standard deviations of all the replicates per time point
+stdmeans=[
+mean(stdmatrices.hxt4.gp2percent);
+mean(stdmatrices.hxt4.gp4percent);
+mean(stdmatrices.hxt4.g1percent);
+mean(stdmatrices.mth1ko.gp2percent);
+mean(stdmatrices.mth1ko.gp4percent);
+mean(stdmatrices.mth1ko.g1percent);
+mean(stdmatrices.mig1ko.gp2percent);
+mean(stdmatrices.mig1ko.gp4percent);
+mean(stdmatrices.mig1ko.g1percent);
+mean(stdmatrices.std1ko.gp2percent);
+mean(stdmatrices.std1ko.gp4percent);
+mean(stdmatrices.std1ko.g1percent);
+mean(stdmatrices.rgt2ko.gp2percent);
+mean(stdmatrices.rgt2ko.gp4percent);
+mean(stdmatrices.rgt2ko.g1percent);
+mean(stdmatrices.snf3ko.gp2percent);
+mean(stdmatrices.snf3ko.gp4percent);
+mean(stdmatrices.snf3ko.g1percent);
+]
+
+savejson('',stdmeans,'/Users/s1259407/Dropbox/PhD/phd_peter_swain/data/plate_reader_data/PythonScripts/Mig1Model/json/stdmeans.json');
+
+
+%% standard deviation of the means of each experiment. tighter
+meanerr=[
+nanstd(meandatamutants.hxt4.gp2percent);
+nanstd(meandatamutants.hxt4.gp4percent);
+nanstd(meandatamutants.hxt4.g1percent);
+nanstd(meandatamutants.mth1ko.gp2percent);
+nanstd(meandatamutants.mth1ko.gp4percent);
+nanstd(meandatamutants.mth1ko.g1percent);
+nanstd(meandatamutants.mig1ko.gp2percent);
+nanstd(meandatamutants.mig1ko.gp4percent);
+nanstd(meandatamutants.mig1ko.g1percent);
+nanstd(meandatamutants.std1ko.gp2percent);
+nanstd(meandatamutants.std1ko.gp4percent);
+nanstd(meandatamutants.std1ko.g1percent);
+nanstd(meandatamutants.rgt2ko.gp2percent);
+nanstd(meandatamutants.rgt2ko.gp4percent);
+nanstd(meandatamutants.rgt2ko.g1percent);
+nanstd(meandatamutants.snf3ko.gp2percent);
+nanstd(meandatamutants.snf3ko.gp4percent);
+nanstd(meandatamutants.snf3ko.g1percent);
+]
+
+savejson('',meanerr,'/Users/s1259407/Dropbox/PhD/phd_peter_swain/data/plate_reader_data/PythonScripts/Mig1Model/json/meanerr.json');
 %

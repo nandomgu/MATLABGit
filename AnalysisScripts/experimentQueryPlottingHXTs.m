@@ -172,12 +172,37 @@ currentfolders={...
 
 }
 
+%% currentfolders={...
+%'20170610_results', 0.4;...%20170610  glucose 0.4 hat
+%'20170613_results', 0.4;...%20170613 glucose 0.4 hat
+%'20170615_results',0.2;...%20170615 glucose 0.2% hat %0.4,...%20170627 glucose 0.4% hat.FAULTY EXPT
+%'20170629_results',0.4;...%20170629 glucose 0.4 hat
+%'20170630_results',0.4;...%20170630 glucose 0.4 hat
+%'20170703_results',1;...%20170703 glucose 1% hat... originallly labelled 20170703 but currently can't find this.
+'20170704_results',1; ...%20170704 1% hat
+%'20170720_results',0.2; ...%20170720 0.2% hat
+%'20170721_results',0.2;...%20170721 0.2% hat
+%'20170722_results',0.2;...%20170722 0.2% hat
+'20170518_results',1;...%20170518 1% hat
+'20170525_results',1;...%20170525 1% hat
+'20170521_results',1;...%20170521 1% hat
+'20171007_results_omero',1;...%20171007 1% hat
+%'20171009_results',1;...%20171009 1% hat 4hr hat it seems
+'20171012_results',1;...%20171012 1% hat
+%'20171013_results',1;...%20171013 1% hat 4hrs
+'20170302Mock',1;...
+%'20170303_results', 0.4;...
+'20170221_results', 1;...
+'20170222_results', 1;...
+
+}
+
 %%
 cy5=[];
 recompile=false;
 exptList={};
 allnms={};
-for n=1:size(currentfolders, 1)
+for n= 1:size(currentfolders, 1)
 disp(['trying folder number ' num2str(n) ': ' currentfolders{n,:} ])
 pth=[rootpath filesep currentfolders{n,1}] ;
 disp(pth)
@@ -207,7 +232,7 @@ bgchan=3;
     tmpinput=arrayfun(hill, cy5(n, :));
     figure; plot(cy5(n, :))
     hold on; plot(tmpinput)
-    fprintf(fopen([currentfolders{n, 1} '_input.txt'], 'w'),'%3.3f , %3.3f\n', [times(1:230)',  tmpinput(1:230)']')
+    %fprintf(fopen([currentfolders{n, 1} '_input.txt'], 'w'),'%3.3f , %3.3f\n', [times(1:230)',  tmpinput(1:230)']')
 
     
     %end
@@ -271,13 +296,22 @@ straincolors=[
 ]
 
 
+newcolors=[.8 0 .8; %magenta
+    .08, .6, 1; % light blue
+    .5, 0, .9; % purple
+   0,0, .6; %dark blue
+   0,0,0; % black
+   .3,.8, .3;  %lighter green
+   .1, .5, .1]           %darker green
+    
 
+%%
 refstrain='hxt4' %make [] if unwanted
 refrange=[1:30]   % make [] if unwanted
 mode=2; 
 
  strains={...
-      'hxt1';...
+      'hxt1';
       'hxt2';...
       'hxt3';...
       'hxt4';...
@@ -390,7 +424,7 @@ concentrations=[currentfolders{:,2}];
         xlabel('Time (Hrs)');
         end
         ylabel('Mean cell FL (±SEM)');
-        title([strn 'in' num2str(plotcons(j))]);
+        title([strn ' in ' num2str(plotcons(j))]);
         %ylim([0,10])
        
               
@@ -417,7 +451,7 @@ concentrations=[currentfolders{:,2}];
 %         end
         
         disp(['interpolating main data. strain ' strn 'media ' num2str(plotcons(j)), ' replicate ' num2str(k) ])
-        ntimes=linspace(0, 20, 250); %new time vector
+        ntimes=linspace(0, 20, 450); %new time vector
         newy= interp1(times, means(1, :), ntimes, 'pchip',nan); %interpolating times to sample at the same point throughout. points above return a nan
         mat(k,:)=newy;
         disp(['interpolating hxt4 for this replicate'])

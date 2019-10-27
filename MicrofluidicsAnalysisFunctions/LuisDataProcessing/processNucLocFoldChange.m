@@ -1,6 +1,9 @@
 function [mn, nms, times]=processNucLocFoldChange(multichamber, nms, rng,baserange, cellchan)
 
-
+if nargin<3 ||isempty(rng)
+    
+    rng=1:size(multichamber.(nms{1}).cellInf(1).mean,2)
+end
 %%nms is a cell array of strings
 
 if nargin<2 ||isempty(nms)
@@ -21,8 +24,12 @@ end
 
 debug=1;
 
-
-    times=nanmean(multichamber.(nms{1}).cellInf(1).times/60);
+    try
+        times=nanmean(multichamber.(nms{1}).cellInf(1).times/60);
+    catch
+        times=(((1:rng)-1)*5/60);
+    end
+    
 if ~isfield(multichamber.(nms{1}).cellInf(1), 'times')
     disp('experiment likely does not contain time variable. defaulting to hours in 5 minute intervals')
     len=size(multichamber.(nms{1}).cellInf(cellchan).mean,2);

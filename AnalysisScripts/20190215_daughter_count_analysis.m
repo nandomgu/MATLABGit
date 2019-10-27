@@ -4,7 +4,7 @@ load('/Users/s1259407/Documents/MATLAB/mySystemPreferences.mat')
 addpath('/Users/s1259407/Documents/MATLAB/GeneralFunctions2019')
 addpath('/Users/s1259407/Documents/MATLAB/Add-ons')
 addpath(genpath('/Users/s1259407/Documents/MATLAB/OmeroCode'))
-addpath(genpath('/User                                     s/s1259407/Documents/MATLAB/MattSegCode2019'))
+addpath(genpath('/Users/s1259407/Documents/MATLAB/MattSegCode2019'))
 load('/Users/s1259407/Dropbox/PhD/phd_peter_swain/data/timelapse_results_mobilefolder/20181213_results/cExperiment_001_with_lineage.mat')
 
 %% load omeroand edit gui
@@ -14,9 +14,17 @@ cExperiment.omeroDs= odb.getDsListFromTag(cExperiment.id)
 a=editCellSegGUI(cExperiment, 'channels', {'Brightfield_3', 'GFPFast', 'cy5'})
 
 
-%% 
+%% recalculate which positions have any mothers 
 budtimepoints=struct;
-posbud=[2 3 4 7 8 14 15 16 23 24 25 26]
+posbud=[]
+for j=1: numel(cExperiment.dirs) 
+   if  any(any(cExperiment.returnTimelapse(j).cellMothers))
+       posbud=[posbud j];
+   end 
+end
+%%
+
+%posbud=[2 3 4 7 8 14 15 16 23 24 25 26]
 strainmothers=struct;
 for h=1:numel(posbud)
 ct=cExperiment.returnTimelapse(posbud(h))
@@ -108,6 +116,12 @@ figure; boxplot([totalbuds.wt; totalbuds.mth1; totalbuds.rgt2; totalbuds.std1] ,
 ylim([0, 20])
 ylabel('budding events per cell')
 %% smoothed budding frequencies
+
+mth1s=cattraces(budtimepoints, 'mth1')
+std1s=cattraces(budtimepoints, 'std1')
+hxt4s=cattraces(budtimepoints, 'hxt4')
+rgt2s=cattraces(budtimepoints, 'rgt2')
+
 figure;
 subplot(2,1,1)
 cy5=nanmean(cExperiment.cellInf(3).imBackground);
@@ -236,18 +250,20 @@ ylabel('Density (budding events)')
 %% budding frequency over time.
 %effective time period
 timepoints=54:12:234
-getwindow=@(num) timepoints(num):timepoints(num+1)
+getwindow=@(num) timepoints(num):timepoints(num+1);
 cols=linspecer(4);
 freqsovertime=[]
 for ind =1: size(allbudtimes,1)
-getcellfreq= @(num) sum(allbudtimes(ind, getwindow(num)))
-freqsovertime(ind, :) =arrayfun(getcellfreq, 1:numel(timepoints)-1)
+getcellfreq= @(num) sum(allbudtimes(ind, getwindow(num)));
+freqsovertime(ind, :) =arrayfun(getcellfreq, 1:numel(timepoints)-1);
 end
 figure; 
 for j=1:4
   %subplot(5,1,j)  
-localmat=freqsovertime(colinds==j, :)
-errorbar(mean(localmat),std(localmat),  'color', cols(j, :), 'DisplayName', strains{j});
+localmat=freqsovertime(colinds==j, :);
+errorbar([], mean(localmat),std(localmat),  'color', cols(j, :), 'DisplayName', strains{j});
+
+
 hold on;
 end
 %% 

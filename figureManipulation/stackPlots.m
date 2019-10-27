@@ -1,7 +1,11 @@
 function stackPlots(fig, xlab)
 
 bottomMargin=.05;
-totalHeight=1-bottomMargin;
+topMargin=0;
+leftMargin=.08;
+rightMargin=.04;
+axisSpacing=0.015;
+
 if isempty(fig)
     fig=gcf;
 end
@@ -17,13 +21,16 @@ end
  
  %%divide the height evenly 
 
- axesHeight= totalHeight/numel(a);
+
+totalHeight=1-bottomMargin-topMargin;
  
-  positions =linspace(1-axesHeight, bottomMargin, numel(a));
+ axesHeight= (totalHeight/numel(a))-axisSpacing;
+ 
+  positions =linspace(1-axesHeight-topMargin-axisSpacing, bottomMargin, numel(a));
   axorder= fliplr(1:numel(positions))
  for j= 1:numel(positions)
-     
-     set(a(axorder(j)), 'Position', [0, positions(j), 1, axesHeight])
+     disp(j)
+     set(a(axorder(j)), 'Position', [leftMargin, positions(j), 1-leftMargin-rightMargin, axesHeight])
     
       if j~=numel(positions)
          
@@ -34,11 +41,11 @@ end
       end
     
     
-     if j==numel(positions)
-         xlabel(xlab)
-        showTicks(a(j));
+     %if j==numel(positions)
+      %   xlabel(xlab)
+       % showTicks(a(j));
         
-     end         
+    % end         
  end
 end
 

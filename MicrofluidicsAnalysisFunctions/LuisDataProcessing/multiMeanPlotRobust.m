@@ -58,6 +58,7 @@ for j= 1:numel(nms)
     o=1; 
     try plot((1:size(cExperiment.cellInf(3).mean(xNaNIndices(cExperiment),range), 2))*5/60, zero2NaN(cExperiment.cellInf(2).mean(xNaNIndices(cExperiment),range))', ':', 'Color', cmap(j,:));  
     catch  ME 
+        
         plot((1:size(cExperiment.cellInf(3).mean(:,range), 2))*5/60, zero2NaN(cExperiment.cellInf(2).mean(:,range))', ':', 'Color', cmap(j,:));  end 
     
     

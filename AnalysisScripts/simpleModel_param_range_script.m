@@ -637,7 +637,7 @@ nanmean(meandatamutants.snf3ko.g1percent)...%18
    
  
 
-  allfitstdcurated=[nanstd(meandatamutants.hxt4.gp2percent); ...%1
+  allfitsemcurated=[nanstd(meandatamutants.hxt4.gp2percent); ...%1
 nanstd(meandatamutants.hxt4.gp4percent([1 3:end], :)); ...%2
 nanstd(meandatamutants.hxt4.g1percent); ...%3
 nanstd(meandatamutants.mig1ko.gp2percent); ...%4
@@ -660,7 +660,7 @@ nanstd(meandatamutants.snf3ko.gp2percent);...%16
 nanstd(meandatamutants.snf3ko.gp4percent);...%17 rep 1 screwed up. usng all cells from rep 2
 nanstd(meandatamutants.snf3ko.g1percent)...%18
 ]'      
- allfitstdcurated=allfitstdcurated(1:230, :);
+ allfitsemcurated=allfitsemcurated(1:230, :);
    
  
  
